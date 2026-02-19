@@ -97,7 +97,7 @@ function SignupContent() {
         
         <div className="relative z-10">
             <div className="flex items-center gap-2 mb-12">
-                <Logo variant="light" />
+                <Logo variant="full" />
                 <span className="text-2xl font-bold">PropPlug</span>
             </div>
 
