@@ -8,7 +8,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs, doc, updateDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { Logo } from '@/shared/components/Logo';
 import Link from 'next/link';
-import { Plus, LayoutGrid, LogOut, Trash2, AlertTriangle, ArrowRightLeft, ExternalLink, HelpCircle, MessageSquare, PlayCircle } from 'lucide-react';
+import { Plus, LayoutGrid, LogOut, Trash2, AlertTriangle, ArrowRightLeft, ExternalLink, HelpCircle, MessageSquare, PlayCircle, TrendingUp } from 'lucide-react';
 import { ProgressBar } from '@/components/insights/ProgressBar';
 import { OnboardingProvider, useOnboarding } from './OnboardingContext';
 import { ActivationOverlay } from './ActivationOverlay';
