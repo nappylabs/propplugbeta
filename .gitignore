@@ -1,0 +1,19 @@
+# Dependencies
+node_modules
+
+# Next.js build output
+.next
+out
+build
+
+# Vercel
+.vercel
+
+# Environment variables
+.env
+.env.local
+
+# Misc
+PropPlug Logo.png
+.DS_Store
+*.log
