@@ -423,7 +423,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
     if (prompt && prompt.completedAt) {
       prompt.isPinned = !prompt.isPinned;
       newInsights.lastUpdated = Date.now();
-      setInputs(prev => ({ ...prev, insights: newInsights }));
+      setInputs((prev: any) => ({ ...prev, insights: newInsights }));
     }
   }, [inputs.insights]);
 
@@ -432,7 +432,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
     if (!currentInsights) return;
 
     const newInsights: DealInsights = { ...currentInsights, freeformNotes: text, lastUpdated: Date.now() };
-    setInputs(prev => ({ ...prev, insights: newInsights }));
+    setInputs((prev: any) => ({ ...prev, insights: newInsights }));
   }, [inputs.insights]);
 
   // Sync persona from extension data if available
@@ -569,7 +569,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
   };
 
   const updateCustomExpense = (id: string, field: 'name' | 'value', val: string) => {
-    setInputs(prev => ({
+    setInputs((prev: any) => ({
       ...prev,
       customExpenses: prev.customExpenses.map((e: any) => e.id === id ? { ...e, [field]: val } : e)
     }));
