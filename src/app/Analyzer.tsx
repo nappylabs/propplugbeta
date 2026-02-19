@@ -1118,7 +1118,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     label="Affordability" 
                     value={analysis.owner.incomeRatio} 
                     valType="percent"
-                    valType="percent" colorBehavior="inverseThreshold" threshold={{ green: 30, amber: 40 }} description="Percentage of gross income spent on housing costs. Banks typically look for this to be under 30%." 
+                    colorBehavior="inverseThreshold" threshold={{ green: 30, amber: 40 }} description="Percentage of gross income spent on housing costs. Banks typically look for this to be under 30%." 
                 />
                 <KpiCard 
                     label="Disposable Income" 
@@ -1440,4 +1440,4 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
       )}
     </div>
   );
-}
+};
