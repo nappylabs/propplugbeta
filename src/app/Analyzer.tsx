@@ -409,7 +409,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
       else newInsights.progress.status = 'getting_started';
 
       newInsights.lastUpdated = Date.now();
-      setInputs(prev => ({ ...prev, insights: newInsights }));
+      setInputs((prev: any) => ({ ...prev, insights: newInsights }));
     }
   }, [inputs.insights]);
 
