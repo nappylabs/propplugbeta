@@ -217,7 +217,7 @@ export default function LandingPage() {
       <footer className="bg-[#0F172A] text-white py-20">
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12">
           <div className="space-y-6">
-            <Logo variant="light" />
+            <Logo variant="full" />
             <p className="text-slate-400 text-sm font-medium">Helping South African property buyers make data-driven decisions since 2024.</p>
             <div className="flex gap-4">
               <Twitter size={20} className="text-slate-500 hover:text-white cursor-pointer transition-colors" />
