@@ -3,6 +3,8 @@ import { X, Brain, Edit, Star, CheckCircle, ChevronDown, ChevronUp } from 'lucid
 import { PROMPTS, Prompt } from '@/shared/data/prompts';
 import { DealInsights, InsightPromptResponse } from '@/types/insights';
 import { ProgressBar } from './ProgressBar';
+import { InsightCategory } from '@/types/insights';
+
 
 interface InsightCardProps {
   prompt: Prompt;
