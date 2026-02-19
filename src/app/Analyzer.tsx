@@ -794,7 +794,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
 
             {user && !isActionDisabled && (
                 <button 
-                    onClick={handleSave}
+                    onClick={() => handleSave()}
                     disabled={isSaving}
                     className="flex items-center gap-2 px-6 py-2 bg-white text-slate-900 rounded-xl font-bold text-xs hover:bg-slate-200 transition-colors disabled:opacity-50"
                 >
