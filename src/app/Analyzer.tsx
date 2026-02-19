@@ -561,11 +561,11 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
   // Custom Expense Handlers
   const addCustomExpense = () => {
     const newExpense = { id: Date.now().toString(), name: '', value: '' };
-    setInputs(prev => ({ ...prev, customExpenses: [...(prev.customExpenses || []), newExpense] }));
+    setInputs((prev: any) => ({ ...prev, customExpenses: [...(prev.customExpenses || []), newExpense] }));
   };
 
   const removeCustomExpense = (id: string) => {
-    setInputs(prev => ({ ...prev, customExpenses: prev.customExpenses.filter((e: any) => e.id !== id) }));
+    setInputs((prev: any) => ({ ...prev, customExpenses: prev.customExpenses.filter((e: any) => e.id !== id) }));
   };
 
   const updateCustomExpense = (id: string, field: 'name' | 'value', val: string) => {
