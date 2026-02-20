@@ -6,6 +6,7 @@ import { calculateInvestorMetrics, calculateOwnerMetrics, calculateTenantMetrics
 import { DEFAULTS } from '../shared/constants';
 import { trackSiteAccess } from './components/services/tracking';
 import { Logo } from '../shared/components/Logo';
+import { APP_BASE_URL } from '../lib/constants'; 
 
 const CURRENCY_SYMBOLS = {
   ZAR: 'R',
@@ -142,9 +143,8 @@ export default function App() {
       const json = JSON.stringify(payload);
       const base64 = btoa(unescape(encodeURIComponent(json)));
       const encoded = encodeURIComponent(base64);
-      // IMPORTANT: Replace with your actual Vercel deployment URL
-      const productionUrl = 'https://your-prop-plug-app.vercel.app';
-      const targetUrl = `${productionUrl}/login?data=${encoded}`;
+      
+      const targetUrl = `${APP_BASE_URL}login?data=${encoded}`;
       console.log("Opening URL:", targetUrl);
       window.open(targetUrl, '_blank');
     } catch (e) {

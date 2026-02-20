@@ -237,7 +237,9 @@ export default function LandingPage() {
             <h4 className="font-black mb-6 uppercase tracking-widest text-xs text-indigo-400">Company</h4>
             <ul className="space-y-4 text-slate-400 text-sm font-bold">
               <li className="hover:text-white cursor-pointer">About Us</li>
-              <li className="hover:text-white cursor-pointer">Privacy Policy</li>
+              <li>
+                <Link href="/privacy" className="hover:text-white cursor-pointer transition-colors">Privacy Policy</Link>
+              </li>
               <li className="hover:text-white cursor-pointer">Terms of Service</li>
             </ul>
           </div>
