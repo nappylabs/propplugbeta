@@ -266,7 +266,7 @@ function DashboardInner() {
         ) : (
             <ActivationOverlay />
         )}
-        <PersonaMorpher />
+        {!hasCompletedTour && <PersonaMorpher />}
         <TourGuide />
         <DeleteConfirmationModal 
             isOpen={!!projectToDelete}
@@ -326,7 +326,13 @@ function DashboardInner() {
             {view === 'projects' && user ? (
                 <div>
                     <div className="flex justify-between items-center mb-8">
-                        <div className="flex gap-4 border-b border-slate-800">
+                        <div className="flex gap-6 border-b border-slate-800">
+                            <button onClick={() => setView('projects')} className="pb-4 text-sm font-bold text-white border-b-2 border-[#6366F1]">
+                                Analyses
+                            </button>
+                            <button onClick={() => setView('comparisons')} className="pb-4 text-sm font-bold text-slate-400 hover:text-white border-b-2 border-transparent transition-colors">
+                                Comparisons
+                            </button>
                         </div>
                         <button id="new-analysis-button" onClick={handleNewProject} className="flex items-center gap-2 px-4 py-2 bg-[#6366F1] text-white rounded-xl font-bold text-sm hover:bg-[#5558DD] transition-all">
                             <Plus size={16} /> New Analysis
@@ -338,6 +344,14 @@ function DashboardInner() {
             ) : view === 'comparisons' && user ? (
                 <div>
                     <div className="flex justify-between items-center mb-8">
+                        <div className="flex gap-6 border-b border-slate-800">
+                            <button onClick={() => setView('projects')} className="pb-4 text-sm font-bold text-slate-400 hover:text-white border-b-2 border-transparent transition-colors">
+                                Analyses
+                            </button>
+                            <button onClick={() => setView('comparisons')} className="pb-4 text-sm font-bold text-white border-b-2 border-[#6366F1]">
+                                Comparisons
+                            </button>
+                        </div>
                         <Link href="/compare" className="flex items-center gap-2 px-4 py-2 bg-[#6366F1] text-white rounded-xl font-bold text-sm hover:bg-[#5558DD] transition-all">
                             <Plus size={16} /> New Comparison
                         </Link>
