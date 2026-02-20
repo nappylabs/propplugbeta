@@ -93,13 +93,10 @@ function DashboardInner() {
   // Handle Extension Data Handoff
   useEffect(() => {
     const dataParam = searchParams.get('data');
-    console.log('[Dashboard Page] Received data param:', dataParam ? dataParam.substring(0, 50) + '...' : 'null');
     if (dataParam) {
       try {
         // Unicode-safe decoding
-        console.log('[Dashboard Page] Attempting to decode...');
         const decoded = decodeURIComponent(escape(atob(dataParam)));
-        console.log('[Dashboard Page] Decode successful. Parsing JSON...');
         setInitialData(JSON.parse(decoded));
         setView('analyzer'); // Force analyzer view if data is present
       } catch (e) {
@@ -135,7 +132,7 @@ function DashboardInner() {
       // AND the user hasn't completed the tour previously.
       // Set to step 2, as step 0 and 1 are pre-tour states.
       updateStep(2);
-    } else if (isActive && hasCompletedTour && onboardingState.step === 0) {
+    } else if (isActive && hasCompletedTour && onboardingState.step < 8) {
         // If tour is already completed, skip onboarding steps
         updateStep(8);
     }
@@ -145,7 +142,9 @@ function DashboardInner() {
   useEffect(() => {
       if (onboardingState.step === 8 && user && !hasCompletedTour) {
           const db = getFirestore();
-          updateDoc(doc(db, 'users', user.uid), { hasCompletedTour: true });
+          updateDoc(doc(db, 'users', user.uid), { hasCompletedTour: true }).catch(err => {
+              console.error("Failed to save tour completion status:", err);
+          });
           setHasCompletedTour(true);
       }
   }, [onboardingState.step, user, hasCompletedTour]);
@@ -245,6 +244,7 @@ function DashboardInner() {
   const handleRestartTour = () => {
       updateStep(0);
       setIsHelpOpen(false);
+      setHasCompletedTour(false); // Allow the tour to run again locally
       // Reset view to projects so the tour elements (like "New Analysis") are visible
       setView('projects');
       setInitialData(null);

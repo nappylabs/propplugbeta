@@ -2,11 +2,13 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const nodemailer = require("nodemailer");
 admin.initializeApp();
-
-// Email Transporter (Use your SMTP details)
+ 
+// Email Transporter
+// Use `functions.config().nodemailer` to access the environment variables
+// you set with `firebase functions:config:set`.
 const transporter = nodemailer.createTransport({
   service: 'gmail',
-  auth: { user: 'your-email@propplug.co.za', pass: 'your-app-password' }
+  auth: { user: functions.config().nodemailer.user, pass: functions.config().nodemailer.pass }
 });
 
 exports.requestSnapshotPermission = functions.https.onCall(async (data, context) => {

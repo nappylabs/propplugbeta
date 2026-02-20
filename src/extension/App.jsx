@@ -144,7 +144,7 @@ export default function App() {
       const base64 = btoa(unescape(encodeURIComponent(json)));
       const encoded = encodeURIComponent(base64);
       
-      const targetUrl = `${APP_BASE_URL}login?data=${encoded}`;
+      const targetUrl = `${APP_BASE_URL}/login?data=${encoded}`;
       console.log("Opening URL:", targetUrl);
       window.open(targetUrl, '_blank');
     } catch (e) {
