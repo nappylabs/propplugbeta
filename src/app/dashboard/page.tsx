@@ -73,7 +73,9 @@ function DashboardInner() {
           const db = getFirestore();
           const userRef = doc(db, 'users', currentUser.uid);
           const snap = await getDoc(userRef);
-          const plan = snap.data()?.plan || 'free';
+          const userData = snap.data();
+          const plan = userData?.plan || 'free';
+          setHasCompletedTour(userData?.hasCompletedTour || false);
           
           if (plan !== 'core') {
               router.replace('/limited-dashboard');
