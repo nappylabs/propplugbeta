@@ -75,8 +75,6 @@ function DashboardInner() {
           const snap = await getDoc(userRef);
           const plan = snap.data()?.plan || 'free';
           
-          setHasCompletedTour(snap.data()?.hasCompletedTour || false);
-
           if (plan !== 'core') {
               router.replace('/limited-dashboard');
               return;

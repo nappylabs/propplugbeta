@@ -180,12 +180,12 @@ export default function LandingPage() {
             <button onClick={() => setIsAnnual(!isAnnual)} className="w-16 h-9 bg-slate-200 rounded-full relative p-1 transition-all">
               <div className={`w-7 h-7 bg-white rounded-full shadow-lg transition-transform ${isAnnual ? 'translate-x-7' : 'translate-x-0'}`}></div>
             </button>
-            <span className={`text-sm font-bold ${isAnnual ? 'text-indigo-600' : 'text-slate-400'}`}>Annual <span className="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-1 rounded-md ml-2 font-black uppercase tracking-widest">SAVE 20%</span></span>
+            <span className={`text-sm font-bold ${isAnnual ? 'text-indigo-600' : 'text-slate-400'}`}>Annual <span className="text-[10px] text-emerald-600 ml-1 font-black">-40%</span></span>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <PriceCard name="Free" price="0" features={['Extension Access', 'Quick Screen View', 'Limited Dashboard']} cta="Join for Free" />
-            <PriceCard name="Core" price={isAnnual ? '1080' : '60'} period={isAnnual ? '/year' : '/month'} subtext={isAnnual ? 'R90/mo' : '1st mo, then R150/mo'} popular features={['Save Unlimited Projects', 'Advanced Flip Logic', '10-Yr Projections', 'Custom Assumptions']} cta="Start 5-Day Trial" />
+            <PriceCard name="Free" price="0" features={['Extension Access', 'Quick Screen View', 'Limited Dashboard', 'Owner/Tenant Income Calculator']} cta="Join for Free" />
+            <PriceCard name="Core" price={isAnnual ? '1080' : '60'} period={isAnnual ? '/year' : '/month'} subtext={isAnnual ? 'R90/mo' : '1st mo, then R150/mo'} popular features={['Save Unlimited Projects', 'Advanced Flip Logic', '10-Yr Projections', 'Side-by-Side Deal Comparison', 'AI-Powered Deal Memory', 'Multi-Persona Access']} cta="Start 5-Day Trial" />
           </div>
         </div>
       </section>
@@ -279,17 +279,17 @@ function Step({ number, title, desc, img, reverse }: any) {
   );
 }
 
-function PriceCard({ name, price, period = '/month', subtext, features, cta, popular }: any) {
+function PriceCard({ name, price, period = '', subtext, features, cta, popular }: any) {
   return (
-    <div className={`p-12 rounded-[3.5rem] text-left border-2 transition-all hover:-translate-y-4 ${popular ? 'border-indigo-600 bg-white shadow-card-hover relative' : 'border-slate-100 bg-slate-50'}`}>
+    <div className={`p-12 rounded-[3.5rem] text-left border-2 transition-all hover:-translate-y-4 flex flex-col h-full ${popular ? 'border-indigo-600 bg-white shadow-card-hover relative' : 'border-slate-100 bg-slate-50'}`}>
       {popular && <span className="absolute -top-5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest">Growth Plan</span>}
       <h3 className="text-2xl font-black mb-4">{name}</h3>
       <div className="mb-10">
         <span className="text-5xl font-black">R {price}</span>
-        <span className="text-slate-400 font-bold ml-1">{period}</span>
+        {price !== '0' && <span className="text-slate-400 font-bold ml-1">{period}</span>}
         {subtext && <p className="text-xs text-indigo-600 font-bold mt-1">{subtext}</p>}
       </div>
-      <ul className="space-y-5 mb-12">
+      <ul className="space-y-5 mb-12 flex-grow">
         {features.map((f: any) => (
           <li key={f} className="flex items-center gap-4 text-slate-600 font-bold">
             <div className="w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center"><Check size={12} strokeWidth={4} /></div>
