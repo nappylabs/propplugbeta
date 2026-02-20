@@ -176,7 +176,7 @@ function DashboardInner() {
   };
 
   const handleProjectClick = (project: any) => {
-    setInitialData({ ...project.inputSnapshot, id: project.id });
+    setInitialData({ ...project.inputSnapshot, id: project.id, projectName: project.projectName });
     setView('analyzer');
     setShouldOpenInsights(false); // Reset unless explicitly set by URL later
   };
@@ -185,7 +185,8 @@ function DashboardInner() {
     if (onboardingState.step === 2) {
       updateStep(3);
     }
-    setInitialData(null);
+    const newProjectName = `Project #${projects.length + 1}`;
+    setInitialData({ projectName: newProjectName });
     setView('analyzer');
   };
   
@@ -280,6 +281,18 @@ function DashboardInner() {
                 <div className="h-8 w-8 flex items-center justify-center text-white"><Logo /></div>
                 <span className="text-white font-bold text-lg hidden sm:block">PropPlug</span>
             </div>
+            {view === 'analyzer' && (
+                <div className="flex-grow flex justify-center px-4">
+                    <input
+                        type="text"
+                        value={initialData?.projectName || ''}
+                        onChange={(e) => setInitialData(prev => ({ ...prev, projectName: e.target.value }))}
+                        onBlur={() => { if (!initialData?.projectName) setInitialData((prev: any) => ({ ...prev, projectName: `Project #${projects.length + 1}` })) }}
+                        placeholder="Enter project name..."
+                        className="bg-transparent text-white text-center font-bold text-lg w-full max-w-md outline-none focus:bg-slate-800 rounded-lg px-3 py-1 transition-colors placeholder:text-slate-500"
+                    />
+                </div>
+            )}
             <div className="flex items-center gap-4">
                 {user ? (
                     <div className="flex items-center gap-4">
@@ -397,7 +410,7 @@ const ProjectGrid = ({ projects, onProjectClick, onRequestDelete }: any) => (
                     </div>
                     <button onClick={(e) => onRequestDelete(p.id, e)} className="p-2 -m-2 text-slate-500 hover:text-rose-500 transition-colors z-10" title="Delete Project"><Trash2 size={14} /></button>
                 </div>
-                <h3 className="text-white font-bold text-lg mb-1 group-hover:text-[#6366F1] transition-colors truncate">{p.inputSnapshot?.address || 'Untitled Project'}</h3>
+                <h3 className="text-white font-bold text-lg mb-1 group-hover:text-[#6366F1] transition-colors truncate">{p.projectName || p.inputSnapshot?.address || 'Untitled Project'}</h3>
                 <p className="text-slate-400 text-sm truncate">{p.inputSnapshot?.askingPrice ? `${CURRENCY_SYMBOLS[p.inputSnapshot?.currency] || 'R'} ${Number(p.inputSnapshot.askingPrice).toLocaleString()}` : 'No price'}</p>
                 {p.inputSnapshot?.insights?.progress && (
                     <div className="mt-4 pt-4 border-t border-slate-800">
