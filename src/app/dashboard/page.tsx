@@ -61,6 +61,7 @@ function DashboardInner() {
   const [shouldOpenInsights, setShouldOpenInsights] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [hasCheckedExtension, setHasCheckedExtension] = useState(false);
+  const [hasCompletedTour, setHasCompletedTour] = useState(false);
   const isActive = !!user;
   const { state: onboardingState, updateStep } = useOnboarding();
 
@@ -74,6 +75,8 @@ function DashboardInner() {
           const snap = await getDoc(userRef);
           const plan = snap.data()?.plan || 'free';
           
+          setHasCompletedTour(snap.data()?.hasCompletedTour || false);
+
           if (plan !== 'core') {
               router.replace('/limited-dashboard');
               return;
@@ -128,13 +131,26 @@ function DashboardInner() {
 
   // Effect to start the tour after initial onboarding and extension check
   useEffect(() => {
-    if (isActive && hasCheckedExtension && onboardingState.step === 0) {
+    if (isActive && hasCheckedExtension && onboardingState.step === 0 && !hasCompletedTour) {
       // Only start the tour if the user is active, has checked the extension,
       // and the tour hasn't been started/completed yet (step 0 implies not started).
+      // AND the user hasn't completed the tour previously.
       // Set to step 2, as step 0 and 1 are pre-tour states.
       updateStep(2);
+    } else if (isActive && hasCompletedTour && onboardingState.step === 0) {
+        // If tour is already completed, skip onboarding steps
+        updateStep(8);
     }
-  }, [isActive, hasCheckedExtension, onboardingState.step, updateStep]);
+  }, [isActive, hasCheckedExtension, onboardingState.step, updateStep, hasCompletedTour]);
+
+  // Effect to mark tour as completed in backend
+  useEffect(() => {
+      if (onboardingState.step === 8 && user && !hasCompletedTour) {
+          const db = getFirestore();
+          updateDoc(doc(db, 'users', user.uid), { hasCompletedTour: true });
+          setHasCompletedTour(true);
+      }
+  }, [onboardingState.step, user, hasCompletedTour]);
 
   const fetchProjects = async (uid: string) => {
     try {
@@ -247,7 +263,7 @@ function DashboardInner() {
 
   return (
     <div className="min-h-screen bg-[#020617] text-white">
-        {onboardingState.step === 1 && !hasCheckedExtension ? (
+        {onboardingState.step === 1 && !hasCheckedExtension && !hasCompletedTour ? (
             <ExtensionCheck onComplete={() => setHasCheckedExtension(true)} />
         ) : (
             <ActivationOverlay />

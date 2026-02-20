@@ -41,7 +41,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-indigo-100 scroll-smooth">
       
       {/* 🎀 Navigation Ribbon */}
-      <nav className="max-w-5xl mx-auto mt-6 px-6 py-3 flex justify-between items-center bg-white/90 backdrop-blur-xl sticky top-6 z-[100] border border-slate-200 rounded-full shadow-xl">
+      <nav className="max-w-6xl mx-auto mt-6 px-6 py-3 flex justify-between items-center bg-white/90 backdrop-blur-xl sticky top-6 z-[100] border border-slate-200 rounded-full shadow-xl">
         <Logo />
         <div className="flex items-center gap-6">
           <a href="#demo" className="text-sm font-bold text-slate-600 hover:text-indigo-600 transition-colors hidden md:block">Demo</a>
@@ -57,12 +57,12 @@ export default function LandingPage() {
       </nav>
 
       {/* 🎯 Section 1: Hero */}
-      <header className="max-w-7xl mx-auto px-6 pt-24 pb-32 grid lg:grid-cols-2 gap-16 items-center">
+      <header className="max-w-6xl mx-auto px-6 pt-20 pb-24 grid lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 rounded-full text-xs font-black uppercase tracking-widest border border-indigo-100">
             <Zap size={14} className="animate-pulse" /> Stop Guessing, Start Winning
           </div>
-          <h1 className="text-6xl md:text-8xl font-black leading-[0.95] tracking-tighter text-[#0F172A]">
+          <h1 className="text-5xl md:text-7xl font-black leading-[0.95] tracking-tighter text-[#0F172A]">
             Kill Analysis Paralysis. <br />
             Find That <span className="text-indigo-600 inline-block hover:animate-vibrate hover:scale-105 transition-transform cursor-help">10/10 Deal</span> Fast.
           </h1>
@@ -87,10 +87,10 @@ export default function LandingPage() {
       </header>
 
       {/* 🛑 Section 2: Benefits Carousel (The Red Flag Detector) */}
-      <section id="demo" className="py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-20">
-            <h2 className="text-5xl font-black text-[#0F172A] mb-4">Avoid shady deals. <br/>Find red flags fast.</h2>
+      <section id="demo" className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="mb-16">
+            <h2 className="text-4xl font-black text-[#0F172A] mb-4">Avoid shady deals. <br/>Find red flags fast.</h2>
             <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Professional-grade intelligence for the everyday buyer.</p>
           </div>
 
@@ -120,9 +120,9 @@ export default function LandingPage() {
       </section>
 
       {/* 👤 Section 3: Profile Switcher */}
-      <section className="py-32 bg-[#F8FAFC]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
+      <section className="py-24 bg-[#F8FAFC]">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
             <h2 className="text-4xl font-black mb-4 uppercase tracking-tight">Pick Your Persona</h2>
             <div className="flex justify-center gap-4 bg-white p-2 rounded-full w-fit mx-auto shadow-sm border border-slate-200">
               {Object.keys(profiles).map((p) => (
@@ -139,7 +139,7 @@ export default function LandingPage() {
 
           <div className="grid lg:grid-cols-2 gap-12 items-center bg-white p-12 rounded-[4rem] shadow-xl border border-slate-100">
             <div className="space-y-8">
-              <h3 className="text-5xl font-black text-indigo-600 tracking-tighter">{profiles[activeProfile as keyof typeof profiles].title}</h3>
+              <h3 className="text-4xl font-black text-indigo-600 tracking-tighter">{profiles[activeProfile as keyof typeof profiles].title}</h3>
               <ul className="space-y-4">
                 {profiles[activeProfile as keyof typeof profiles].points.map((pt, i) => (
                   <li key={i} className="flex items-center gap-4 font-bold text-xl text-slate-700">
@@ -157,12 +157,12 @@ export default function LandingPage() {
       </section>
 
       {/* 🚀 Section 4: Step-by-Step Guide */}
-      <section className="py-32 bg-white overflow-hidden">
+      <section className="py-24 bg-white overflow-hidden">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-24">
-            <h2 className="text-6xl font-black text-[#0F172A] tracking-tighter">Screen and build your <br/>deal book in seconds.</h2>
+          <div className="text-center mb-20">
+            <h2 className="text-5xl font-black text-[#0F172A] tracking-tighter">Screen and build your <br/>deal book in seconds.</h2>
           </div>
-          <div className="space-y-40">
+          <div className="space-y-32">
             <Step number="01" title="Plug In" desc="Launch the extension on Property24 or Private Property." img="step_1_extension.png" />
             <Step number="02" title="Screen" desc="Confirm price and rent to see instant yield and cashflow." img="step_2_screen.png" reverse />
             <Step number="03" title="Save" desc="Add potential wins to your repository for deep analysis." img="step_3_save.png" />
@@ -172,10 +172,10 @@ export default function LandingPage() {
       </section>
 
       {/* 💰 Section 5: Pricing */}
-      <section id="pricing" className="py-32 bg-[#F8FAFC]">
+      <section id="pricing" className="py-24 bg-[#F8FAFC]">
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <h2 className="text-5xl font-black mb-16">Simple, Honest Pricing.</h2>
-          <div className="flex items-center justify-center gap-6 mb-20 bg-white p-3 rounded-full w-fit mx-auto shadow-sm border border-slate-200">
+          <h2 className="text-4xl font-black mb-12">Simple, Honest Pricing.</h2>
+          <div className="flex items-center justify-center gap-6 mb-16 bg-white p-3 rounded-full w-fit mx-auto shadow-sm border border-slate-200">
             <span className={`text-sm font-bold ${!isAnnual ? 'text-indigo-600' : 'text-slate-400'}`}>Monthly</span>
             <button onClick={() => setIsAnnual(!isAnnual)} className="w-16 h-9 bg-slate-200 rounded-full relative p-1 transition-all">
               <div className={`w-7 h-7 bg-white rounded-full shadow-lg transition-transform ${isAnnual ? 'translate-x-7' : 'translate-x-0'}`}></div>
@@ -184,14 +184,14 @@ export default function LandingPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <PriceCard name="Free" price="0" features={['Extension Access', 'Quick Screen View', 'Limited Dashboard']} cta="Install Free" />
-            <PriceCard name="Core" price={isAnnual ? '199' : '249'} popular features={['Save Unlimited Projects', 'Advanced Flip Logic', '10-Yr Projections', 'Custom Assumptions']} cta="Get Full Access" />
+            <PriceCard name="Free" price="0" features={['Extension Access', 'Quick Screen View', 'Limited Dashboard']} cta="Join for Free" />
+            <PriceCard name="Core" price={isAnnual ? '1080' : '60'} period={isAnnual ? '/year' : '/month'} subtext={isAnnual ? 'R90/mo' : '1st mo, then R150/mo'} popular features={['Save Unlimited Projects', 'Advanced Flip Logic', '10-Yr Projections', 'Custom Assumptions']} cta="Start 5-Day Trial" />
           </div>
         </div>
       </section>
 
       {/* 🙋‍♂️ Section 6: FAQ Accordion */}
-      <section className="py-32 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-4xl font-black text-center mb-16 uppercase tracking-widest">Questions?</h2>
           <div className="space-y-4">
@@ -215,7 +215,7 @@ export default function LandingPage() {
 
       {/* 🏁 Footer */}
       <footer className="bg-[#0F172A] text-white py-20">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12">
+        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-12">
           <div className="space-y-6">
             <Logo variant="full" />
             <p className="text-slate-400 text-sm font-medium">Helping South African property buyers make data-driven decisions since 2024.</p>
@@ -228,9 +228,9 @@ export default function LandingPage() {
           <div>
             <h4 className="font-black mb-6 uppercase tracking-widest text-xs text-indigo-400">Product</h4>
             <ul className="space-y-4 text-slate-400 text-sm font-bold">
-              <li className="hover:text-white cursor-pointer">Chrome Extension</li>
-              <li className="hover:text-white cursor-pointer">Web Dashboard</li>
-              <li className="hover:text-white cursor-pointer">Pricing</li>
+              <li><a href="https://chrome.google.com/webstore" target="_blank" className="hover:text-white cursor-pointer transition-colors">Chrome Extension</a></li>
+              <li><Link href="/login" className="hover:text-white cursor-pointer transition-colors">Web Dashboard</Link></li>
+              <li><a href="#pricing" className="hover:text-white cursor-pointer transition-colors">Pricing</a></li>
             </ul>
           </div>
           <div>
@@ -240,7 +240,9 @@ export default function LandingPage() {
               <li>
                 <Link href="/privacy" className="hover:text-white cursor-pointer transition-colors">Privacy Policy</Link>
               </li>
-              <li className="hover:text-white cursor-pointer">Terms of Service</li>
+              <li>
+                <Link href="/terms" className="hover:text-white cursor-pointer transition-colors">Terms of Service</Link>
+              </li>
             </ul>
           </div>
           <div className="bg-slate-800/50 p-8 rounded-[2.5rem] border border-slate-700">
@@ -252,7 +254,7 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-slate-800 text-center text-slate-500 text-xs font-bold">
+        <div className="max-w-6xl mx-auto px-6 mt-20 pt-8 border-t border-slate-800 text-center text-slate-500 text-xs font-bold">
           © 2026 PropPlug. All rights reserved.
         </div>
       </footer>
@@ -277,14 +279,15 @@ function Step({ number, title, desc, img, reverse }: any) {
   );
 }
 
-function PriceCard({ name, price, features, cta, popular }: any) {
+function PriceCard({ name, price, period = '/month', subtext, features, cta, popular }: any) {
   return (
     <div className={`p-12 rounded-[3.5rem] text-left border-2 transition-all hover:-translate-y-4 ${popular ? 'border-indigo-600 bg-white shadow-card-hover relative' : 'border-slate-100 bg-slate-50'}`}>
       {popular && <span className="absolute -top-5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest">Growth Plan</span>}
       <h3 className="text-2xl font-black mb-4">{name}</h3>
       <div className="mb-10">
         <span className="text-5xl font-black">R {price}</span>
-        <span className="text-slate-400 font-bold ml-1">/month</span>
+        <span className="text-slate-400 font-bold ml-1">{period}</span>
+        {subtext && <p className="text-xs text-indigo-600 font-bold mt-1">{subtext}</p>}
       </div>
       <ul className="space-y-5 mb-12">
         {features.map((f: any) => (
@@ -294,9 +297,9 @@ function PriceCard({ name, price, features, cta, popular }: any) {
           </li>
         ))}
       </ul>
-      <button className={`w-full py-6 rounded-3xl font-black text-xl transition-all ${popular ? 'bg-indigo-600 text-white shadow-lg hover:bg-indigo-700' : 'bg-[#0F172A] text-white hover:bg-slate-800'}`}>
+      <Link href="/signup" className={`block w-full py-6 rounded-3xl font-black text-xl text-center transition-all ${popular ? 'bg-indigo-600 text-white shadow-lg hover:bg-indigo-700' : 'bg-[#0F172A] text-white hover:bg-slate-800'}`}>
         {cta}
-      </button>
+      </Link>
     </div>
   );
 }
