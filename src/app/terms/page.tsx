@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, FileText, Scale, AlertCircle } from 'lucide-react';
+import { ArrowLeft, FileText, Scale, AlertCircle, CreditCard, Database, ShieldAlert, Cookie, Users, Gavel, Lock } from 'lucide-react';
 import { Logo } from '@/shared/components/Logo';
 
 export default function TermsPage() {
@@ -25,7 +25,7 @@ export default function TermsPage() {
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-black tracking-tight">Terms of Service</h1>
           <p className="text-xl text-slate-400 leading-relaxed">
-            Please read these terms carefully before using PropPlug. By using our service, you agree to be bound by these terms.
+            These Terms govern your use of PropPlug’s Chrome Extension, web dashboard, mobile interfaces, and related services (“Service”). By using the Service, you agree to these Terms.
           </p>
           <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">Last Updated: February 2026</p>
         </div>
@@ -33,63 +33,238 @@ export default function TermsPage() {
         {/* Main Content */}
         <div className="space-y-12 text-slate-300 leading-relaxed">
           
+          {/* 1) TERMS OF SERVICE */}
           <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-              <FileText className="text-slate-500" size={24} />
-              1. Acceptance of Terms
-            </h2>
-            <p>
-              By accessing and using the PropPlug Chrome Extension and Web Dashboard ("Service"), you accept and agree to be bound by the terms and provision of this agreement. In addition, when using these particular services, you shall be subject to any posted guidelines or rules applicable to such services.
-            </p>
+            <h2 className="text-3xl font-black text-white mb-6 border-b border-slate-800 pb-4">1. Terms of Service</h2>
+            
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">1. Who We Are</h3>
+                <p>PropPlug is a software platform that analyzes publicly available real estate listings and user-provided data to generate financial insights.</p>
+                <p>The Service is for informational purposes only.</p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">2. Eligibility</h3>
+                <p>You must:</p>
+                <ul className="list-disc pl-6 space-y-1 marker:text-indigo-500">
+                  <li>Be at least 18 years old</li>
+                  <li>Have legal capacity to enter contracts</li>
+                  <li>Provide accurate information</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">3. Accounts</h3>
+                <p>You are responsible for:</p>
+                <ul className="list-disc pl-6 space-y-1 marker:text-indigo-500">
+                  <li>Maintaining account security</li>
+                  <li>All activity under your account</li>
+                  <li>Keeping login credentials confidential</li>
+                </ul>
+                <p className="mt-2">We may suspend accounts for misuse or violations.</p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">4. Subscription & Billing</h3>
+                <p>Subscriptions are billed:</p>
+                <ul className="list-disc pl-6 space-y-1 marker:text-indigo-500">
+                  <li>Monthly or annually in advance</li>
+                  <li>Automatically renewed unless cancelled</li>
+                </ul>
+                <p className="mt-2">Cancellation stops future billing but does not retroactively refund prior payments.</p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">5. Free Trials</h3>
+                <p>If a trial converts to paid:</p>
+                <ul className="list-disc pl-6 space-y-1 marker:text-indigo-500">
+                  <li>Billing begins automatically unless cancelled before trial end</li>
+                  <li>One trial per user unless otherwise stated</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">6. Refund Policy</h3>
+                <p>Except where required by law:</p>
+                <ul className="list-disc pl-6 space-y-1 marker:text-indigo-500">
+                  <li>Fees are non-refundable</li>
+                  <li>No refunds for partial periods</li>
+                  <li>See Refund Policy below for details</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">7. Permitted Use</h3>
+                <p>You may use PropPlug for personal or business decision support.</p>
+                <p className="mt-2">You may NOT:</p>
+                <ul className="list-disc pl-6 space-y-1 marker:text-indigo-500">
+                  <li>Reverse engineer the software</li>
+                  <li>Resell or redistribute the Service</li>
+                  <li>Scrape PropPlug systems</li>
+                  <li>Use the Service for illegal activity</li>
+                  <li>Interfere with system integrity</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">8. Data Accuracy & Third-Party Sources</h3>
+                <p>Property data is collected from publicly available listings.</p>
+                <p className="mt-2">We do not guarantee:</p>
+                <ul className="list-disc pl-6 space-y-1 marker:text-indigo-500">
+                  <li>Accuracy</li>
+                  <li>Completeness</li>
+                  <li>Timeliness</li>
+                  <li>Availability</li>
+                </ul>
+                <p className="mt-2">You must independently verify all information.</p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">9. No Professional Advice</h3>
+                <p>PropPlug does NOT provide:</p>
+                <ul className="list-disc pl-6 space-y-1 marker:text-indigo-500">
+                  <li>Financial advice</li>
+                  <li>Investment advice</li>
+                  <li>Legal advice</li>
+                  <li>Real estate advice</li>
+                </ul>
+                <p className="mt-2">Use at your own risk.</p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">10. Intellectual Property</h3>
+                <p>All software, design, algorithms, and content belong to PropPlug.</p>
+                <p>You receive a limited, non-exclusive license to use the Service.</p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">11. Limitation of Liability</h3>
+                <p>To the maximum extent permitted by law:</p>
+                <p className="mt-2">PropPlug is not liable for:</p>
+                <ul className="list-disc pl-6 space-y-1 marker:text-indigo-500">
+                  <li>Investment losses</li>
+                  <li>Business losses</li>
+                  <li>Indirect or consequential damages</li>
+                  <li>Loss of profits or opportunities</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">12. Termination</h3>
+                <p>We may suspend or terminate access for:</p>
+                <ul className="list-disc pl-6 space-y-1 marker:text-indigo-500">
+                  <li>Terms violations</li>
+                  <li>Fraudulent activity</li>
+                  <li>Abuse of the platform</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">13. Governing Law</h3>
+                <p>For South African users: laws of South Africa</p>
+                <p>For Kenyan users: laws of Kenya</p>
+                <p className="mt-2">Disputes resolved in competent courts of the applicable jurisdiction.</p>
+              </div>
+            </div>
           </section>
 
-          <section className="space-y-4">
+          {/* 3) REFUND & BILLING POLICY */}
+          <section className="space-y-4 pt-8 border-t border-slate-800">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-              <Scale className="text-slate-500" size={24} />
-              2. Use of Service
+              <CreditCard className="text-slate-500" size={24} />
+              Refund & Billing Policy
             </h2>
-            <p>
-              PropPlug provides real estate analysis tools for informational purposes only. The Service does not constitute financial, legal, or real estate advice. You agree to use the Service only for lawful purposes and in a way that does not infringe the rights of, restrict or inhibit anyone else's use and enjoyment of the Service.
-            </p>
             <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
-              <li>You are responsible for maintaining the confidentiality of your account and password.</li>
-              <li>You agree not to reproduce, duplicate, copy, sell, resell or exploit any portion of the Service.</li>
-              <li>Automated scraping of our dashboard or reverse engineering of our extension is strictly prohibited.</li>
+              <li>Subscriptions are billed in advance</li>
+              <li>No refunds for unused time</li>
+              <li>Cancellation stops future billing only</li>
+              <li>Refunds may be issued at our discretion for technical failures</li>
+              <li>If local law requires refunds, those provisions apply.</li>
             </ul>
           </section>
 
-          <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">3. Subscription & Billing</h2>
-            <p>
-              Certain features of the Service are billed on a subscription basis ("Subscription(s)"). You will be billed in advance on a recurring and periodic basis ("Billing Cycle"). Billing cycles are set either on a monthly or annual basis, depending on the type of subscription plan you select when purchasing a Subscription.
-            </p>
-            <p>
-              You may cancel your Subscription at any time. Your cancellation will take effect at the end of the current paid term.
-            </p>
+          {/* 4) DATA & SCRAPING USE POLICY */}
+          <section className="space-y-4 pt-8 border-t border-slate-800">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Database className="text-slate-500" size={24} />
+              Public Listing Data Policy
+            </h2>
+            <p>PropPlug processes property data from publicly available listing pages solely to provide analytics for users.</p>
+            <p>We:</p>
+            <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
+              <li>Do not republish listing content</li>
+              <li>Do not claim ownership of listing data</li>
+              <li>Store only user-saved information</li>
+              <li>Respect website terms where applicable</li>
+            </ul>
+            <p>Users remain responsible for compliance with listing site terms.</p>
           </section>
 
-          <section className="space-y-4">
+          {/* 5) ACCEPTABLE USE POLICY */}
+          <section className="space-y-4 pt-8 border-t border-slate-800">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <ShieldAlert className="text-slate-500" size={24} />
+              Acceptable Use Policy
+            </h2>
+            <p>Users must not:</p>
+            <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
+              <li>Use PropPlug for illegal purposes</li>
+              <li>Upload harmful content</li>
+              <li>Attempt unauthorized access</li>
+              <li>Interfere with service operations</li>
+              <li>Use automated tools against PropPlug</li>
+            </ul>
+            <p>Violations may result in account termination.</p>
+          </section>
+
+          {/* 6) FINANCIAL & REAL ESTATE DISCLAIMER */}
+          <section className="space-y-4 pt-8 border-t border-slate-800">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
               <AlertCircle className="text-slate-500" size={24} />
-              4. Disclaimer of Warranties
+              Financial & Real Estate Disclaimer
             </h2>
-            <p>
-              The Service is provided on an "AS IS" and "AS AVAILABLE" basis. PropPlug makes no representations or warranties of any kind, express or implied, as to the operation of their services, or the information, content, or materials included therein. You expressly agree that your use of these services, their content, and any services or items obtained from us is at your sole risk.
-            </p>
-            <p>
-              We do not guarantee the accuracy of property data scraped from third-party websites, as this data is subject to change and formatting errors on the source sites.
-            </p>
+            <p>PropPlug provides analytical tools only.</p>
+            <p>We do not guarantee investment outcomes.</p>
+            <p>Real estate involves risk, including loss of capital.</p>
+            <p>Always consult qualified professionals before making decisions.</p>
           </section>
 
-          <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">5. Limitation of Liability</h2>
-            <p>
-              In no event shall PropPlug, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.
-            </p>
+          {/* 7) COOKIE POLICY */}
+          <section className="space-y-4 pt-8 border-t border-slate-800">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Cookie className="text-slate-500" size={24} />
+              Cookie Policy
+            </h2>
+            <p>We use cookies and similar technologies to:</p>
+            <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
+              <li>Enable login sessions</li>
+              <li>Store preferences</li>
+              <li>Analyze usage</li>
+              <li>Improve performance</li>
+            </ul>
+            <p>You may disable cookies via browser settings, though functionality may be affected.</p>
           </section>
 
-          <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">6. Contact Us</h2>
+          {/* 8) AFFILIATE TERMS */}
+          <section className="space-y-4 pt-8 border-t border-slate-800">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Users className="text-slate-500" size={24} />
+              Affiliate Terms (Optional)
+            </h2>
+            <p>If you plan affiliate marketing:</p>
+            <p>Affiliates must:</p>
+            <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
+              <li>Disclose promotional relationships</li>
+              <li>Avoid misleading claims</li>
+              <li>Not impersonate PropPlug</li>
+              <li>Not engage in spam marketing</li>
+            </ul>
+            <p>Commissions may be withheld for fraud or policy violations.</p>
+          </section>
+
+          <section className="space-y-4 pt-8 border-t border-slate-800">
+            <h2 className="text-xl font-bold text-white">Contact Us</h2>
             <p>
               If you have any questions about these Terms, please contact us at:
             </p>

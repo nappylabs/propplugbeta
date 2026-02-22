@@ -15,6 +15,7 @@ import { ActivationOverlay } from './ActivationOverlay';
 import { ExtensionCheck } from './ExtensionCheck';
 import { PersonaMorpher } from './PersonaMorpher';
 import { TourGuide } from './TourGuide';
+import { LegalGatekeeper } from './LegalGatekeeper';
 
 const CURRENCY_SYMBOLS: { [key: string]: string } = {
   ZAR: 'R',
@@ -62,6 +63,7 @@ function DashboardInner() {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [hasCheckedExtension, setHasCheckedExtension] = useState(false);
   const [hasCompletedTour, setHasCompletedTour] = useState(false);
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const isActive = !!user;
   const { state: onboardingState, updateStep } = useOnboarding();
 
@@ -76,6 +78,7 @@ function DashboardInner() {
           const userData = snap.data();
           const plan = userData?.plan || 'free';
           setHasCompletedTour(userData?.hasCompletedTour || false);
+          setHasAcceptedTerms(userData?.termsAccepted || false);
           
           if (plan !== 'core') {
               router.replace('/limited-dashboard');
@@ -254,12 +257,30 @@ function DashboardInner() {
       setShouldOpenInsights(false);
   };
 
+  const handleTermsAcceptance = async () => {
+      if (!user) return;
+      try {
+          const db = getFirestore();
+          await updateDoc(doc(db, 'users', user.uid), { 
+              termsAccepted: true,
+              termsAcceptedAt: new Date()
+          });
+          setHasAcceptedTerms(true);
+      } catch (error) {
+          console.error("Error accepting terms:", error);
+      }
+  };
+
   if (loading) {
      return (
       <div className="min-h-screen bg-[#0F172A] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6366F1]"></div>
       </div>
     );
+  }
+
+  if (user && !hasAcceptedTerms) {
+      return <LegalGatekeeper onAccept={handleTermsAcceptance} />;
   }
 
   return (

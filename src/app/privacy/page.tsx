@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Shield, Lock, Eye } from 'lucide-react';
+import { ArrowLeft, Shield, Lock, Eye, Globe, Database, UserCheck, Cookie } from 'lucide-react';
 import { Logo } from '@/shared/components/Logo';
 
 export default function PrivacyPolicyPage() {
@@ -25,8 +25,13 @@ export default function PrivacyPolicyPage() {
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-black tracking-tight">Protecting Your Privacy</h1>
           <p className="text-xl text-slate-400 leading-relaxed">
-            At PropPlug, we believe your data belongs to you. This policy outlines how we collect, use, and protect your information when you use our Chrome Extension and Web Dashboard.
+            We respect your privacy and process personal information lawfully under:
           </p>
+          <ul className="list-disc pl-6 text-slate-400 space-y-1">
+            <li>South Africa’s POPIA</li>
+            <li>Kenya’s Data Protection Act, 2019</li>
+            <li>International privacy standards</li>
+          </ul>
           <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">Last Updated: February 2026</p>
         </div>
 
@@ -49,58 +54,165 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-4">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
               <Eye className="text-slate-500" size={24} />
-              1. Data Collection
+              1. Information We Collect
             </h2>
-            <p>We collect the minimum amount of data necessary to provide our services:</p>
+            <h3 className="font-bold text-white mt-4">Account Information</h3>
             <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
-              <li><strong>Account Information:</strong> When you sign up, we collect your email address and name via Firebase Authentication to manage your account and subscription.</li>
-              <li><strong>Property Data:</strong> When you use the extension to "Save Deal", we collect the public property data (price, address, features) from the webpage you are viewing. This is done only at your explicit request.</li>
-              <li><strong>User Inputs:</strong> Financial assumptions (interest rates, rent, expenses) you enter into the calculator are stored to provide your analysis.</li>
+              <li>Name</li>
+              <li>Email address</li>
+              <li>Authentication data</li>
+            </ul>
+
+            <h3 className="font-bold text-white mt-4">Property & Usage Data</h3>
+            <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
+              <li>Saved listings</li>
+              <li>Financial inputs</li>
+              <li>Notes and insights</li>
+              <li>Interaction history</li>
+            </ul>
+
+            <h3 className="font-bold text-white mt-4">Technical Data</h3>
+            <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
+              <li>Device information</li>
+              <li>IP address</li>
+              <li>Browser type</li>
+              <li>Extension usage</li>
+            </ul>
+
+            <h3 className="font-bold text-white mt-4">Payment Information</h3>
+            <p>Processed securely by third-party providers (e.g., Stripe).</p>
+            <p>We do NOT store card details.</p>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Database className="text-slate-500" size={24} />
+              2. How We Use Your Data
+            </h2>
+            <p>We process data to:</p>
+            <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
+              <li>Provide the Service.</li>
+              <li>Store and analyze deals.</li>
+              <li>Improve functionality.</li>
+              <li>Prevent fraud.</li>
+              <li>Communicate with users.</li>
+              <li>Comply with legal obligations.</li>
             </ul>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-              <Lock className="text-slate-500" size={24} />
-              2. How We Use Your Data
+              <Shield className="text-slate-500" size={24} />
+              3. Legal Basis for Processing
             </h2>
-            <p>Your data is used strictly for the functionality of the product:</p>
+            <p>Processing is based on:</p>
             <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
-              <li>To calculate financial metrics (Yield, ROI, Cashflow).</li>
-              <li>To build your personal deal repository dashboard.</li>
-              <li>To improve the accuracy of our scraping algorithms.</li>
+              <li>Performance of a contract</li>
+              <li>Legitimate interests</li>
+              <li>Legal compliance</li>
+              <li>User consent (where required)</li>
             </ul>
-            <p className="font-bold text-white mt-4">We do not sell your data to third parties, data brokers, or advertisers.</p>
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">3. Data Sharing & Third Parties</h2>
-            <p>We only share data with trusted service providers necessary to run our application:</p>
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Globe className="text-slate-500" size={24} />
+              4. Data Sharing
+            </h2>
+            <p>We share data only with trusted providers necessary to operate the Service, including:</p>
             <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
-              <li><strong>Google Firebase:</strong> For secure authentication, database storage, and hosting.</li>
-              <li><strong>Stripe (if applicable):</strong> For processing subscription payments. We do not store your credit card details.</li>
+              <li>Cloud hosting</li>
+              <li>Authentication services</li>
+              <li>Payment processors</li>
+              <li>Analytics providers</li>
             </ul>
-            <p>We may disclose data if required by law, or to protect against fraud and abuse.</p>
+            <p>We do NOT sell personal data.</p>
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">4. Data Security</h2>
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Lock className="text-slate-500" size={24} />
+              5. Public Listing Data
+            </h2>
             <p>
-              We employ industry-standard security measures. All data is transmitted via HTTPS using modern cryptography. 
-              Authentication information is handled securely by Google Firebase. We do not store passwords in plain text.
+              Property information saved through the extension comes from publicly accessible listing pages.
+            </p>
+            <p>
+              We store only what you choose to save.
             </p>
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">5. Your Rights</h2>
-            <p>
-              You have the right to access, correct, or delete your data. You can delete specific property analyses directly from your dashboard. 
-              To delete your entire account and all associated data, please contact us or use the delete account option in your settings.
-            </p>
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Globe className="text-slate-500" size={24} />
+              6. International Transfers
+            </h2>
+            <p>Data may be processed outside your country using secure safeguards.</p>
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">6. Contact Us</h2>
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Lock className="text-slate-500" size={24} />
+              7. Data Security
+            </h2>
+            <p>We use:</p>
+            <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
+              <li>Encryption</li>
+              <li>Secure cloud infrastructure</li>
+              <li>Access controls</li>
+              <li>Industry best practices</li>
+            </ul>
+            <p>No system is completely secure.</p>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Database className="text-slate-500" size={24} />
+              8. Retention
+            </h2>
+            <p>We retain data only as long as necessary to provide the Service or comply with legal obligations.</p>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <UserCheck className="text-slate-500" size={24} />
+              9. Your Rights
+            </h2>
+            <p>Depending on jurisdiction, you may:</p>
+            <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
+              <li>Access your data</li>
+              <li>Correct inaccuracies</li>
+              <li>Request deletion</li>
+              <li>Object to processing</li>
+              <li>Withdraw consent</li>
+            </ul>
+            <p>Contact support to exercise rights.</p>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Shield className="text-slate-500" size={24} />
+              10. Children
+            </h2>
+            <p>The Service is not intended for minors.</p>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Cookie className="text-slate-500" size={24} />
+              11. Cookies & Tracking
+            </h2>
+            <p>We use cookies to:</p>
+            <ul className="list-disc pl-6 space-y-2 marker:text-indigo-500">
+              <li>Maintain sessions</li>
+              <li>Improve performance</li>
+              <li>Analyze usage</li>
+            </ul>
+            <p>See Cookie Policy below.</p>
+          </section>
+
+          <section className="space-y-4 pt-8 border-t border-slate-800">
+            <h2 className="text-xl font-bold text-white">Contact Us</h2>
             <p>
               If you have any questions about this Privacy Policy or our data practices, please contact us at:
             </p>
