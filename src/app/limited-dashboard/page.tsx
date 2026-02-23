@@ -76,16 +76,16 @@ function LimitedDashboardContent() {
 
   if (loading) {
      return (
-      <div className="min-h-screen bg-[#020617] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6366F1]"></div>
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white">
+    <div className="min-h-screen bg-zinc-950 text-white">
         {/* Upgrade Banner */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 flex justify-between items-center sticky top-0 z-50 shadow-lg">
+        <div className="bg-gradient-to-r from-orange-600 to-red-600 px-6 py-3 flex justify-between items-center sticky top-0 z-50 shadow-lg">
             <div className="flex items-center gap-3">
                 <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
                     <Lock size={16} className="text-white" />
@@ -97,21 +97,21 @@ function LimitedDashboardContent() {
             <button 
                 onClick={handleUpgrade}
                 disabled={upgrading}
-                className="px-5 py-1.5 bg-white text-indigo-600 rounded-full text-xs font-bold hover:bg-indigo-50 transition-colors shadow-sm disabled:opacity-70"
+                className="px-5 py-1.5 bg-white text-orange-600 rounded-full text-xs font-bold hover:bg-orange-50 transition-colors shadow-sm disabled:opacity-70"
             >
                 {upgrading ? 'Upgrading...' : 'Upgrade to Core'}
             </button>
         </div>
 
-        <nav className="border-b border-slate-800 bg-[#0F172A] px-6 py-4 flex justify-between items-center">
+        <nav className="border-b border-zinc-800 bg-zinc-900 px-6 py-4 flex justify-between items-center">
             <div className="flex items-center gap-2">
                 <div className="h-8 w-8 flex items-center justify-center text-white"><Logo /></div>
                 <span className="text-white font-bold text-lg hidden sm:block">PropPlug</span>
-                <span className="px-2 py-0.5 bg-slate-800 text-slate-400 text-[10px] font-bold uppercase tracking-wider rounded ml-2">Free View</span>
+                <span className="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-[10px] font-bold uppercase tracking-wider rounded ml-2">Free View</span>
             </div>
             <div className="flex items-center gap-4">
                 {user && (
-                    <button onClick={() => auth.signOut()} className="text-slate-500 hover:text-rose-500 transition-colors">
+                    <button onClick={() => auth.signOut()} className="text-zinc-500 hover:text-rose-500 transition-colors">
                         <LogOut size={18} />
                     </button>
                 )}
@@ -127,7 +127,7 @@ function LimitedDashboardContent() {
 
 export default function LimitedDashboardPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#020617] flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6366F1]"></div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-zinc-950 flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div></div>}>
       <LimitedDashboardContent />
     </Suspense>
   );

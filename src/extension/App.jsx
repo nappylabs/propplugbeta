@@ -7,6 +7,7 @@ import { DEFAULTS } from '../shared/constants';
 import { trackSiteAccess } from './components/services/tracking';
 import { Logo } from '../shared/components/Logo';
 import { APP_BASE_URL } from '../lib/constants'; 
+import { Bed, Bath, Car, Maximize } from 'lucide-react';
 
 const CURRENCY_SYMBOLS = {
   ZAR: 'R',
@@ -64,7 +65,12 @@ const initialInputsState = {
   assumedPurchasePrice: '',
   address: '',
   url: '',
-  currency: 'ZAR'
+  currency: 'ZAR',
+  bedrooms: '',
+  bathrooms: '',
+  parking: '',
+  floorSize: '',
+  propertyType: ''
 };
 
 export default function App() {
@@ -94,12 +100,17 @@ export default function App() {
           if (response && response.success) {
             setInputs(prev => ({
               ...prev,
-              askingPrice: response.data.price || '',
-              assumedPurchasePrice: response.data.price || '',
+              askingPrice: response.data.askingPrice || response.data.price || '',
+              assumedPurchasePrice: response.data.askingPrice || response.data.price || '',
               levies: response.data.levies || '',
               rates: response.data.rates || '',
               monthlyRent: response.data.rent || '',
               address: response.data.address || prev.address,
+              bedrooms: response.data.bedrooms || '',
+              bathrooms: response.data.bathrooms || '',
+              parking: response.data.parking || '',
+              floorSize: response.data.floorSize || '',
+              propertyType: response.data.propertyType || '',
               url: tab.url
             }));
           }
@@ -431,6 +442,16 @@ export default function App() {
              </div>
         </div>
 
+        {/* Property Specs Strip */}
+        {(inputs.bedrooms || inputs.bathrooms || inputs.parking || inputs.floorSize) && (
+          <div className="bg-slate-50 border-b border-gray-200 px-4 py-2 flex items-center gap-4 text-xs font-medium text-slate-600 overflow-x-auto">
+            {inputs.bedrooms && <span className="flex items-center gap-1"><Bed size={12} /> {inputs.bedrooms}</span>}
+            {inputs.bathrooms && <span className="flex items-center gap-1"><Bath size={12} /> {inputs.bathrooms}</span>}
+            {inputs.parking && <span className="flex items-center gap-1"><Car size={12} /> {inputs.parking}</span>}
+            {inputs.floorSize && <span className="flex items-center gap-1 ml-auto"><Maximize size={12} /> {inputs.floorSize}m²</span>}
+          </div>
+        )}
+
         {/* Tab Switcher */}
         <div className="px-4 py-4">
           <div className="flex bg-gray-200/60 p-1 rounded-xl">
@@ -472,7 +493,7 @@ export default function App() {
           </button>
           <button
             onClick={handleSaveDeal}
-            className="flex-1 py-2.5 rounded-xl text-sm font-bold shadow-lg transition-all flex justify-center items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white shadow-purple-200"
+            className="flex-1 py-2.5 rounded-xl text-sm font-bold shadow-lg transition-all flex justify-center items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white shadow-orange-200"
           >
             Save Deal
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">

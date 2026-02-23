@@ -126,20 +126,20 @@ export default function ComparePage() {
 
   if (loading) {
     return (
-     <div className="min-h-screen bg-[#020617] flex items-center justify-center">
-       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6366F1]"></div>
+     <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
      </div>
    );
  }
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white">
-        <nav className="border-b border-slate-800 bg-[#0F172A] px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+    <div className="min-h-screen bg-zinc-950 text-white">
+        <nav className="border-b border-zinc-800 bg-zinc-900 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
             <div className="flex items-center gap-4">
-                <Link href="/dashboard" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                <Link href="/dashboard" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors">
                     <ArrowLeft size={20} /> Back
                 </Link>
-                <div className="h-6 w-[1px] bg-slate-700"></div>
+                <div className="h-6 w-[1px] bg-zinc-700"></div>
                 <span className="font-bold text-lg">Compare Properties</span>
             </div>
             <div className="h-8 w-8 flex items-center justify-center text-white"><Logo /></div>
@@ -160,10 +160,10 @@ export default function ComparePage() {
                             <button 
                                 key={cat.id}
                                 onClick={() => setSelectedCategory(cat.id as ComparisonCategory)}
-                                className="bg-[#0F172A] border border-slate-800 p-8 rounded-3xl hover:border-[#6366F1] hover:bg-slate-900 transition-all text-left group"
+                                className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl hover:border-orange-500 hover:bg-zinc-800 transition-all text-left group"
                             >
-                                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#6366F1] transition-colors">{cat.label}</h3>
-                                <p className="text-slate-400">{cat.desc}</p>
+                                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">{cat.label}</h3>
+                                <p className="text-zinc-400">{cat.desc}</p>
                             </button>
                         ))}
                     </div>
@@ -173,13 +173,13 @@ export default function ComparePage() {
                  <div className="max-w-4xl mx-auto">
                     <div className="flex justify-between items-center mb-8">
                         <h2 className="text-2xl font-bold">Select 2 Properties to Compare ({selectedIds.length}/2)</h2>
-                        <button onClick={() => { setSelectedCategory(null); setSelectedIds([]); }} className="text-sm text-slate-400 hover:text-white">Change Category</button>
+                        <button onClick={() => { setSelectedCategory(null); setSelectedIds([]); }} className="text-sm text-zinc-400 hover:text-white">Change Category</button>
                     </div>
                     
                     {filteredProjects.length === 0 ? (
-                        <div className="text-center py-20 border border-dashed border-slate-800 rounded-3xl">
-                            <p className="text-slate-500 mb-4">No projects found for this category.</p>
-                            <button onClick={() => { setSelectedCategory(null); setSelectedIds([]); }} className="text-[#6366F1] font-bold hover:underline">Go back</button>
+                        <div className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl">
+                            <p className="text-zinc-500 mb-4">No projects found for this category.</p>
+                            <button onClick={() => { setSelectedCategory(null); setSelectedIds([]); }} className="text-orange-500 font-bold hover:underline">Go back</button>
                         </div>
                     ) : (
                         <div className="grid gap-4">
@@ -187,13 +187,13 @@ export default function ComparePage() {
                                 <div 
                                     key={p.id} 
                                     onClick={() => toggleSelection(p.id)}
-                                    className={`p-6 rounded-2xl border flex justify-between items-center cursor-pointer transition-all ${selectedIds.includes(p.id) ? 'bg-[#6366F1]/10 border-[#6366F1]' : 'bg-[#0F172A] border-slate-800 hover:border-slate-600'}`}
+                                    className={`p-6 rounded-2xl border flex justify-between items-center cursor-pointer transition-all ${selectedIds.includes(p.id) ? 'bg-orange-500/10 border-orange-500' : 'bg-zinc-900 border-zinc-800 hover:border-zinc-600'}`}
                                 >
                                     <div>
                                         <h4 className="font-bold text-lg text-white">{p.inputSnapshot?.askingPrice ? `${CURRENCY_SYMBOLS[p.inputSnapshot?.currency] || 'R'} ${Number(p.inputSnapshot.askingPrice).toLocaleString()}` : 'Untitled'}</h4>
-                                        <p className="text-slate-400 text-sm">{p.listingUrl || 'Manual Entry'}</p>
+                                        <p className="text-zinc-400 text-sm">{p.listingUrl || 'Manual Entry'}</p>
                                     </div>
-                                    <div className={`w-6 h-6 rounded-full border flex items-center justify-center ${selectedIds.includes(p.id) ? 'bg-[#6366F1] border-[#6366F1] text-white' : 'border-slate-600'}`}>
+                                    <div className={`w-6 h-6 rounded-full border flex items-center justify-center ${selectedIds.includes(p.id) ? 'bg-orange-500 border-orange-500 text-white' : 'border-zinc-600'}`}>
                                         {selectedIds.includes(p.id) && <Check size={14} />}
                                     </div>
                                 </div>
@@ -203,7 +203,7 @@ export default function ComparePage() {
                     
                     {selectedIds.length === 2 && (
                         <div className="fixed bottom-8 left-1/2 -translate-x-1/2">
-                            <button onClick={() => setIsComparing(true)} className="px-8 py-3 bg-[#6366F1] text-white rounded-full font-bold shadow-xl hover:bg-[#5558DD] transition-all">
+                            <button onClick={() => setIsComparing(true)} className="px-8 py-3 bg-orange-600 text-white rounded-full font-bold shadow-xl hover:bg-orange-700 transition-all">
                                 Compare Properties
                             </button>
                         </div>
@@ -216,35 +216,35 @@ export default function ComparePage() {
                     <div className="flex justify-between items-center">
                         <div>
                             <h2 className="text-3xl font-bold text-white">Decision Matrix</h2>
-                            <p className="text-slate-400">
+                            <p className="text-zinc-400">
                                 {comparisonData 
                                     ? `Comparing ${comparisonData.propertyA.inputSnapshot.address} vs ${comparisonData.propertyB.inputSnapshot.address}`
                                     : 'Comparison unavailable due to mismatch'}
                             </p>
                         </div>
                         <div className="flex items-center gap-4">
-                            <button onClick={() => setIsComparing(false)} className="text-sm font-bold text-slate-400 hover:text-white">Change Selection</button>
+                            <button onClick={() => setIsComparing(false)} className="text-sm font-bold text-zinc-400 hover:text-white">Change Selection</button>
                             
                             {/* Share Button & Popover */}
                             <div className="relative">
                                 <button 
                                     onClick={() => setIsShareOpen(!isShareOpen)} 
-                                    className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold text-xs hover:bg-indigo-700 transition-colors"
+                                    className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-xl font-bold text-xs hover:bg-orange-700 transition-colors"
                                 >
                                     <Share2 size={14} /> Share
                                 </button>
                                 {isShareOpen && (
-                                    <div className="absolute right-0 top-full mt-2 w-64 bg-[#0F172A] border border-slate-700 rounded-xl shadow-xl p-4 z-50">
+                                    <div className="absolute right-0 top-full mt-2 w-64 bg-zinc-900 border border-zinc-700 rounded-xl shadow-xl p-4 z-50">
                                         <h4 className="text-xs font-bold text-white mb-3 uppercase tracking-wider">Share Options</h4>
-                                        <label className="flex items-center gap-2 text-sm text-slate-300 mb-2 cursor-pointer">
-                                            <input type="checkbox" checked={shareOptions.includeSource} onChange={e => setShareOptions(prev => ({...prev, includeSource: e.target.checked}))} className="rounded border-slate-700 bg-slate-800 text-indigo-600" />
+                                        <label className="flex items-center gap-2 text-sm text-zinc-300 mb-2 cursor-pointer">
+                                            <input type="checkbox" checked={shareOptions.includeSource} onChange={e => setShareOptions(prev => ({...prev, includeSource: e.target.checked}))} className="rounded border-zinc-700 bg-zinc-800 text-orange-600" />
                                             Include Source Link
                                         </label>
-                                        <label className="flex items-center gap-2 text-sm text-slate-300 mb-4 cursor-pointer">
-                                            <input type="checkbox" checked={shareOptions.includeDealLink} onChange={e => setShareOptions(prev => ({...prev, includeDealLink: e.target.checked}))} className="rounded border-slate-700 bg-slate-800 text-indigo-600" />
+                                        <label className="flex items-center gap-2 text-sm text-zinc-300 mb-4 cursor-pointer">
+                                            <input type="checkbox" checked={shareOptions.includeDealLink} onChange={e => setShareOptions(prev => ({...prev, includeDealLink: e.target.checked}))} className="rounded border-zinc-700 bg-zinc-800 text-orange-600" />
                                             Include Deal Link
                                         </label>
-                                        <button onClick={handleCopyComparison} className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-colors">
+                                        <button onClick={handleCopyComparison} className="w-full py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-colors">
                                             {isCopied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
                                             {isCopied ? 'Copied to Clipboard' : 'Copy Summary'}
                                         </button>
@@ -261,11 +261,11 @@ export default function ComparePage() {
                                 <AlertTriangle className="text-rose-500" size={24} />
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2">Currency Mismatch</h3>
-                            <p className="text-slate-400 max-w-md mx-auto">
+                            <p className="text-zinc-400 max-w-md mx-auto">
                                 You are attempting to compare properties listed in different currencies. 
                                 Please select properties with the same currency to ensure an accurate financial comparison.
                             </p>
-                            <button onClick={() => setIsComparing(false)} className="mt-6 px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-bold transition-colors">
+                            <button onClick={() => setIsComparing(false)} className="mt-6 px-6 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg text-sm font-bold transition-colors">
                                 Select Different Properties
                             </button>
                         </div>
@@ -275,103 +275,103 @@ export default function ComparePage() {
                     {!currencyMismatch && comparisonData && (
                         <>
                             {/* General Details Summary */}
-                            <div className="bg-[#0F172A] border border-slate-800 rounded-2xl overflow-hidden">
-                                <div className="p-6 border-b border-slate-800">
+                            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
+                                <div className="p-6 border-b border-zinc-800">
                                     <h3 className="text-lg font-bold text-white">General Details</h3>
                                 </div>
                                 <div className="p-6">
-                                    <div className="grid grid-cols-3 gap-4 text-xs font-bold text-slate-500 uppercase mb-4">
+                                    <div className="grid grid-cols-3 gap-4 text-xs font-bold text-zinc-500 uppercase mb-4">
                                         <span>Detail</span>
                                         <span className="text-right">Property A</span>
                                         <span className="text-right">Property B</span>
                                     </div>
                                     
                                     {/* Profile & Type */}
-                                    <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-800/50">
-                                        <span className="text-sm text-slate-300">Profile</span>
+                                    <div className="grid grid-cols-3 gap-4 py-3 border-b border-zinc-800/50">
+                                        <span className="text-sm text-zinc-300">Profile</span>
                                         <span className="text-sm text-right text-white capitalize">{comparisonData.propertyA.inputSnapshot.type} - {comparisonData.propertyA.inputSnapshot.strategy}</span>
                                         <span className="text-sm text-right text-white capitalize">{comparisonData.propertyB.inputSnapshot.type} - {comparisonData.propertyB.inputSnapshot.strategy}</span>
                                     </div>
 
                                     {/* Deal Source */}
-                                    <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-800/50">
-                                        <span className="text-sm text-slate-300">Source</span>
+                                    <div className="grid grid-cols-3 gap-4 py-3 border-b border-zinc-800/50">
+                                        <span className="text-sm text-zinc-300">Source</span>
                                         <div className="text-right">
                                             {comparisonData.propertyA.listingUrl ? (
-                                                <a href={comparisonData.propertyA.listingUrl} target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline text-sm flex items-center justify-end gap-1">
+                                                <a href={comparisonData.propertyA.listingUrl} target="_blank" rel="noreferrer" className="text-orange-400 hover:underline text-sm flex items-center justify-end gap-1">
                                                     Link <ExternalLink size={10} />
                                                 </a>
-                                            ) : <span className="text-sm text-slate-500">Manual</span>}
+                                            ) : <span className="text-sm text-zinc-500">Manual</span>}
                                         </div>
                                         <div className="text-right">
                                             {comparisonData.propertyB.listingUrl ? (
-                                                <a href={comparisonData.propertyB.listingUrl} target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline text-sm flex items-center justify-end gap-1">
+                                                <a href={comparisonData.propertyB.listingUrl} target="_blank" rel="noreferrer" className="text-orange-400 hover:underline text-sm flex items-center justify-end gap-1">
                                                     Link <ExternalLink size={10} />
                                                 </a>
-                                            ) : <span className="text-sm text-slate-500">Manual</span>}
+                                            ) : <span className="text-sm text-zinc-500">Manual</span>}
                                         </div>
                                     </div>
 
                                     {/* Currency */}
-                                    <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-800/50">
-                                        <span className="text-sm text-slate-300">Currency</span>
+                                    <div className="grid grid-cols-3 gap-4 py-3 border-b border-zinc-800/50">
+                                        <span className="text-sm text-zinc-300">Currency</span>
                                         <span className="text-sm text-right text-white">{comparisonData.propertyA.inputSnapshot.currency}</span>
                                         <span className="text-sm text-right text-white">{comparisonData.propertyB.inputSnapshot.currency}</span>
                                     </div>
 
                                     {/* Purchase Price */}
-                                    <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-800/50">
-                                        <span className="text-sm text-slate-300">Purchase Price</span>
+                                    <div className="grid grid-cols-3 gap-4 py-3 border-b border-zinc-800/50">
+                                        <span className="text-sm text-zinc-300">Purchase Price</span>
                                         <span className="text-sm text-right text-white font-mono">{CURRENCY_SYMBOLS[comparisonData.propertyA.inputSnapshot.currency]}{Number(comparisonData.propertyA.inputSnapshot.askingPrice).toLocaleString()}</span>
                                         <span className="text-sm text-right text-white font-mono">{CURRENCY_SYMBOLS[comparisonData.propertyB.inputSnapshot.currency]}{Number(comparisonData.propertyB.inputSnapshot.askingPrice).toLocaleString()}</span>
                                     </div>
 
                                     {/* Location */}
                                     <div className="grid grid-cols-3 gap-4 py-3">
-                                        <span className="text-sm text-slate-300">Location</span>
-                                        <span className="text-sm text-right text-white flex items-center justify-end gap-1"><MapPin size={12} className="text-slate-500" /> {comparisonData.propertyA.inputSnapshot.address || 'Unknown'}</span>
-                                        <span className="text-sm text-right text-white flex items-center justify-end gap-1"><MapPin size={12} className="text-slate-500" /> {comparisonData.propertyB.inputSnapshot.address || 'Unknown'}</span>
+                                        <span className="text-sm text-zinc-300">Location</span>
+                                        <span className="text-sm text-right text-white flex items-center justify-end gap-1"><MapPin size={12} className="text-zinc-500" /> {comparisonData.propertyA.inputSnapshot.address || 'Unknown'}</span>
+                                        <span className="text-sm text-right text-white flex items-center justify-end gap-1"><MapPin size={12} className="text-zinc-500" /> {comparisonData.propertyB.inputSnapshot.address || 'Unknown'}</span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Key Differences */}
-                            <div className="bg-[#0F172A] border border-slate-800 rounded-2xl p-6">
+                            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
                         <h3 className="text-lg font-bold text-white mb-4">Key Differences</h3>
                         <div className="grid md:grid-cols-2 gap-4">
                             {comparisonData.keyDifferences.map((diff, i) => (
-                                <div key={i} className="bg-slate-800/50 p-4 rounded-lg flex items-center gap-3">
-                                    <div className="text-indigo-400">
+                                <div key={i} className="bg-zinc-800/50 p-4 rounded-lg flex items-center gap-3">
+                                    <div className="text-orange-400">
                                         {diff.icon === 'yield' && <TrendingUp size={20} />}
                                         {diff.icon === 'cashflow' && <TrendingUp size={20} />}
                                         {diff.icon === 'price' && <Info size={20} />}
                                         {diff.icon === 'risk' && <Shield size={20} />}
                                         {diff.icon === 'cost' && <Info size={20} />}
                                     </div>
-                                    <p className="text-sm text-slate-300">{diff.text}</p>
+                                    <p className="text-sm text-zinc-300">{diff.text}</p>
                                 </div>
                             ))}
                         </div>
                     </div>
 
                             {/* User Insights */}
-                            <div className="bg-[#0F172A] border border-slate-800 rounded-2xl p-6">
+                            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
                                 <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><Brain size={20} /> Your Notes & Concerns</h3>
                                 <div className="grid md:grid-cols-2 gap-6">
                                     {[comparisonData.insightSnapshot.A, comparisonData.insightSnapshot.B].map((snapshot, i) => (
-                                        <div key={i} className="bg-slate-800/50 p-4 rounded-lg">
-                                            <h4 className="font-bold text-slate-300 mb-3">{i === 0 ? 'Property A' : 'Property B'}</h4>
+                                        <div key={i} className="bg-zinc-800/50 p-4 rounded-lg">
+                                            <h4 className="font-bold text-zinc-300 mb-3">{i === 0 ? 'Property A' : 'Property B'}</h4>
                                             {snapshot && Object.values(snapshot.prompts).some(p => p.isPinned) ? (
                                                 <ul className="space-y-4 text-sm">
                                                     {Object.values(snapshot.prompts).filter(p => p.isPinned).map((p) => (
-                                                        <li key={p.id} className="text-sm text-slate-300 border-l-2 border-slate-700 pl-3">
+                                                        <li key={p.id} className="text-sm text-zinc-300 border-l-2 border-zinc-700 pl-3">
                                                             <p className="font-bold text-white text-xs">{p.question}</p>
-                                                            <p className="text-slate-400">{p.response}</p>
+                                                            <p className="text-zinc-400">{p.response}</p>
                                                         </li>
                                                     ))}
                                                 </ul>
                                             ) : (
-                                                <div className="text-sm text-slate-500">
+                                                <div className="text-sm text-zinc-500">
                                                     {snapshot ? (
                                                         <p>No notes pinned. Star (⭐) your key insights to see them here.</p>
                                                     ) : (
@@ -385,13 +385,13 @@ export default function ComparePage() {
                             </div>
 
                             {/* Decision Confidence */}
-                            <div className="bg-[#0F172A] border border-slate-800 rounded-2xl p-6">
+                            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-bold text-white flex items-center gap-2">
                                 Decision Confidence
                                 <div className="group relative">
-                                    <Info size={14} className="text-slate-500 cursor-help" />
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                    <Info size={14} className="text-zinc-500 cursor-help" />
+                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-zinc-950 border border-zinc-700 rounded-lg text-xs text-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                                         This score reflects how deeply you've analyzed each property using the Deal Insights engine. Higher completion leads to clearer, more confident decisions.
                                     </div>
                                 </div>
@@ -400,21 +400,21 @@ export default function ComparePage() {
                         <div className="space-y-4">
                             <div>
                                 <div className="flex justify-between items-center mb-1 text-sm">
-                                    <span className="font-bold text-slate-300">Property A</span>
-                                    <span className="text-slate-400">{comparisonData.insightSnapshot.A?.progress.completionPercent.toFixed(0) || 0}% complete</span>
+                                    <span className="font-bold text-zinc-300">Property A</span>
+                                    <span className="text-zinc-400">{comparisonData.insightSnapshot.A?.progress.completionPercent.toFixed(0) || 0}% complete</span>
                                 </div>
                                 <ProgressBar percentage={comparisonData.insightSnapshot.A?.progress.completionPercent || 0} status={comparisonData.insightSnapshot.A?.progress.status || 'getting_started'} />
-                                <Link href={`/dashboard?projectId=${comparisonData.propertyA.id}&openInsights=true`} className="text-indigo-400 text-xs font-bold mt-2 inline-block hover:underline">
+                                <Link href={`/dashboard?projectId=${comparisonData.propertyA.id}&openInsights=true`} className="text-orange-400 text-xs font-bold mt-2 inline-block hover:underline">
                                     Add/Edit Insights
                                 </Link>
                             </div>
                              <div>
                                 <div className="flex justify-between items-center mb-1 text-sm">
-                                    <span className="font-bold text-slate-300">Property B</span>
-                                    <span className="text-slate-400">{comparisonData.insightSnapshot.B?.progress.completionPercent.toFixed(0) || 0}% complete</span>
+                                    <span className="font-bold text-zinc-300">Property B</span>
+                                    <span className="text-zinc-400">{comparisonData.insightSnapshot.B?.progress.completionPercent.toFixed(0) || 0}% complete</span>
                                 </div>
                                 <ProgressBar percentage={comparisonData.insightSnapshot.B?.progress.completionPercent || 0} status={comparisonData.insightSnapshot.B?.progress.status || 'getting_started'} />
-                                <Link href={`/dashboard?projectId=${comparisonData.propertyB.id}&openInsights=true`} className="text-indigo-400 text-xs font-bold mt-2 inline-block hover:underline">
+                                <Link href={`/dashboard?projectId=${comparisonData.propertyB.id}&openInsights=true`} className="text-orange-400 text-xs font-bold mt-2 inline-block hover:underline">
                                     Add/Edit Insights
                                 </Link>
                             </div>

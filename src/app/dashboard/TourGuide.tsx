@@ -14,14 +14,14 @@ export const TourGuide = () => {
         id: 'new-analysis-button', 
         title: 'Create Property', 
         content: 'Click here to create your first property analysis manually.',
-        icon: <MousePointerClick size={24} className="text-indigo-500" />,
+        icon: <MousePointerClick size={24} className="text-orange-500" />,
         position: 'bottom'
     },
     3: { 
         id: 'assumptions-grid', 
         title: 'Input Data', 
         content: 'Enter the purchase price, rental income, and expenses here. The dashboard will calculate the rest.',
-        icon: <Edit3 size={24} className="text-indigo-500" />
+        icon: <Edit3 size={24} className="text-orange-500" />
     },
     4: { 
         id: 'kpi-grid', 
@@ -31,27 +31,27 @@ export const TourGuide = () => {
             if (persona === 'tenant') return 'Compare Rent vs. Buy metrics and track your Savings Rate.';
             return 'Track Yield, Cashflow, and ROI. These cards give you the instant health check of the deal.';
         },
-        icon: <BarChart2 size={24} className="text-indigo-500" />,
+        icon: <BarChart2 size={24} className="text-orange-500" />,
         position: 'bottom'
     },
     5: { 
         id: 'assumptions-grid', 
         title: 'Detailed Breakdown', 
         content: 'Drill down into the details. Expand these sections to see and adjust the breakdown of costs and income.',
-        icon: <Layers size={24} className="text-indigo-500" />
+        icon: <Layers size={24} className="text-orange-500" />
     },
     6: { 
         id: 'edit-assumptions-btn', 
         title: 'Edit Assumptions', 
         content: 'Want to stress-test the deal? Click here to update inflation rates, loan terms, and other key variables.',
-        icon: <Edit3 size={24} className="text-indigo-500" />,
+        icon: <Edit3 size={24} className="text-orange-500" />,
         position: 'bottom'
     },
     7: { 
         id: 'deal-insights-btn', 
         title: 'Capture Insights', 
         content: 'Don\'t just look at numbers. Click here to open the Insights Engine and record your qualitative analysis.',
-        icon: <Brain size={24} className="text-indigo-500" />,
+        icon: <Brain size={24} className="text-orange-500" />,
         position: 'bottom'
     }
   };
@@ -82,7 +82,7 @@ export const TourGuide = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[990] bg-slate-900/50 backdrop-blur-[2px] transition-all duration-500"
+        className="fixed inset-0 z-[990] bg-zinc-900/50 backdrop-blur-[2px] transition-all duration-500"
         style={{
             clipPath: `polygon(
                 0% 0%, 
@@ -101,7 +101,7 @@ export const TourGuide = () => {
 
       {/* Highlight Border */}
       <div
-        className="fixed border-2 border-indigo-500 rounded-xl shadow-[0_0_30px_rgba(99,102,241,0.5)] z-[991] pointer-events-none transition-all duration-300 ease-in-out"
+        className="fixed border-2 border-orange-500 rounded-xl shadow-[0_0_30px_rgba(249,115,22,0.5)] z-[991] pointer-events-none transition-all duration-300 ease-in-out"
         style={{
           left: targetRect.left - 4,
           top: targetRect.top - 4,
@@ -120,18 +120,18 @@ export const TourGuide = () => {
           top: currentStep.position === 'bottom' ? targetRect.bottom + 20 : Math.max(20, targetRect.top - 240),
           left: Math.max(20, Math.min(window.innerWidth - 340, targetRect.left + (targetRect.width / 2) - 160)),
         }}
-        className="bg-white text-[#0F172A] p-6 rounded-2xl shadow-2xl max-w-xs w-full z-[999]"
+        className="bg-white text-zinc-900 p-6 rounded-2xl shadow-2xl max-w-xs w-full z-[999]"
       >
         <div className="mb-3">{currentStep.icon}</div>
         <h3 className="font-black text-lg mb-2">{currentStep.title}</h3>
-        <p className="text-sm text-slate-600 mb-4 leading-relaxed">{contentText}</p>
+        <p className="text-sm text-zinc-600 mb-4 leading-relaxed">{contentText}</p>
         
         {state.step > 2 && (
             <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-slate-400">Step {state.step - 2} of 5</span>
+                <span className="text-xs font-bold text-zinc-400">Step {state.step - 2} of 5</span>
                 <button 
                     onClick={() => updateStep(state.step + 1)}
-                    className="px-4 py-2 bg-[#0F172A] text-white text-xs font-bold rounded-lg hover:bg-indigo-600 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 bg-zinc-900 text-white text-xs font-bold rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-2"
                 >
                     {state.step === 7 ? 'Finish Tour' : 'Next'} <CheckCircle size={12} />
                 </button>

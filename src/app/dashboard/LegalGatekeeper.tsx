@@ -33,28 +33,28 @@ export const LegalGatekeeper = ({ onAccept }: { onAccept: () => void }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center p-4 text-white font-sans">
-      <div className="max-w-2xl w-full bg-[#0F172A] border border-slate-800 rounded-3xl p-8 shadow-2xl">
+    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4 text-white font-sans">
+      <div className="max-w-2xl w-full bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
         
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4"><Logo /></div>
           <h1 className="text-2xl font-black tracking-tight mb-2">Welcome to PropPlug</h1>
-          <p className="text-slate-400">Before we start, please review and accept our operating standards.</p>
+          <p className="text-zinc-400">Before we start, please review and accept our operating standards.</p>
         </div>
 
         <div className="space-y-6">
           
           {/* 1. Terms of Service */}
-          <div className={`p-4 rounded-xl border transition-all ${checks.terms ? 'bg-indigo-900/20 border-indigo-500/50' : 'bg-slate-900 border-slate-700'}`}>
+          <div className={`p-4 rounded-xl border transition-all ${checks.terms ? 'bg-orange-900/20 border-orange-500/50' : 'bg-zinc-800 border-zinc-700'}`}>
             <div className="flex items-start gap-4">
-              <div onClick={() => toggleCheck('terms')} className={`mt-1 w-6 h-6 rounded border flex items-center justify-center cursor-pointer transition-colors ${checks.terms ? 'bg-indigo-600 border-indigo-600' : viewedTerms ? 'border-slate-500 hover:border-white' : 'border-slate-700 opacity-50 cursor-not-allowed'}`}>
+              <div onClick={() => toggleCheck('terms')} className={`mt-1 w-6 h-6 rounded border flex items-center justify-center cursor-pointer transition-colors ${checks.terms ? 'bg-orange-600 border-orange-600' : viewedTerms ? 'border-zinc-500 hover:border-white' : 'border-zinc-700 opacity-50 cursor-not-allowed'}`}>
                 {checks.terms && <Check size={14} />}
-                {!viewedTerms && !checks.terms && <Lock size={12} className="text-slate-500" />}
+                {!viewedTerms && !checks.terms && <Lock size={12} className="text-zinc-500" />}
               </div>
               <div>
                 <h3 className="font-bold text-sm mb-1">Terms of Service</h3>
-                <p className="text-xs text-slate-400 mb-2">You must read our Terms of Service before accepting.</p>
-                <Link href="/terms" target="_blank" onClick={() => handleLinkClick('terms')} className="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                <p className="text-xs text-zinc-400 mb-2">You must read our Terms of Service before accepting.</p>
+                <Link href="/terms" target="_blank" onClick={() => handleLinkClick('terms')} className="text-xs font-bold text-orange-400 hover:text-orange-300 flex items-center gap-1">
                   <FileText size={12} /> Read Terms of Service <ExternalLink size={10} />
                 </Link>
               </div>
@@ -62,16 +62,16 @@ export const LegalGatekeeper = ({ onAccept }: { onAccept: () => void }) => {
           </div>
 
           {/* 2. Privacy Policy */}
-          <div className={`p-4 rounded-xl border transition-all ${checks.privacy ? 'bg-indigo-900/20 border-indigo-500/50' : 'bg-slate-900 border-slate-700'}`}>
+          <div className={`p-4 rounded-xl border transition-all ${checks.privacy ? 'bg-orange-900/20 border-orange-500/50' : 'bg-zinc-800 border-zinc-700'}`}>
             <div className="flex items-start gap-4">
-              <div onClick={() => toggleCheck('privacy')} className={`mt-1 w-6 h-6 rounded border flex items-center justify-center cursor-pointer transition-colors ${checks.privacy ? 'bg-indigo-600 border-indigo-600' : viewedPrivacy ? 'border-slate-500 hover:border-white' : 'border-slate-700 opacity-50 cursor-not-allowed'}`}>
+              <div onClick={() => toggleCheck('privacy')} className={`mt-1 w-6 h-6 rounded border flex items-center justify-center cursor-pointer transition-colors ${checks.privacy ? 'bg-orange-600 border-orange-600' : viewedPrivacy ? 'border-zinc-500 hover:border-white' : 'border-zinc-700 opacity-50 cursor-not-allowed'}`}>
                 {checks.privacy && <Check size={14} />}
-                {!viewedPrivacy && !checks.privacy && <Lock size={12} className="text-slate-500" />}
+                {!viewedPrivacy && !checks.privacy && <Lock size={12} className="text-zinc-500" />}
               </div>
               <div>
                 <h3 className="font-bold text-sm mb-1">Privacy Policy</h3>
-                <p className="text-xs text-slate-400 mb-2">You must read our Privacy Policy before accepting.</p>
-                <Link href="/privacy" target="_blank" onClick={() => handleLinkClick('privacy')} className="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                <p className="text-xs text-zinc-400 mb-2">You must read our Privacy Policy before accepting.</p>
+                <Link href="/privacy" target="_blank" onClick={() => handleLinkClick('privacy')} className="text-xs font-bold text-orange-400 hover:text-orange-300 flex items-center gap-1">
                   <Shield size={12} /> Read Privacy Policy <ExternalLink size={10} />
                 </Link>
               </div>
@@ -79,14 +79,14 @@ export const LegalGatekeeper = ({ onAccept }: { onAccept: () => void }) => {
           </div>
 
           {/* 3. Investment Disclaimer */}
-          <div onClick={() => toggleCheck('investment')} className={`p-4 rounded-xl border cursor-pointer transition-all ${checks.investment ? 'bg-indigo-900/20 border-indigo-500/50' : 'bg-slate-900 border-slate-700 hover:border-slate-500'}`}>
+          <div onClick={() => toggleCheck('investment')} className={`p-4 rounded-xl border cursor-pointer transition-all ${checks.investment ? 'bg-orange-900/20 border-orange-500/50' : 'bg-zinc-800 border-zinc-700 hover:border-zinc-500'}`}>
             <div className="flex items-start gap-4">
-              <div className={`mt-1 w-6 h-6 rounded border flex items-center justify-center transition-colors ${checks.investment ? 'bg-indigo-600 border-indigo-600' : 'border-slate-500'}`}>
+              <div className={`mt-1 w-6 h-6 rounded border flex items-center justify-center transition-colors ${checks.investment ? 'bg-orange-600 border-orange-600' : 'border-zinc-500'}`}>
                 {checks.investment && <Check size={14} />}
               </div>
               <div>
                 <h3 className="font-bold text-sm mb-1 flex items-center gap-2">Investment Policy <AlertTriangle size={14} className="text-amber-500" /></h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-zinc-400">
                   I understand PropPlug provides data, not financial advice. I am responsible for my own investment decisions and due diligence.
                 </p>
               </div>
@@ -94,14 +94,14 @@ export const LegalGatekeeper = ({ onAccept }: { onAccept: () => void }) => {
           </div>
 
           {/* 4. Data Accuracy */}
-          <div onClick={() => toggleCheck('accuracy')} className={`p-4 rounded-xl border cursor-pointer transition-all ${checks.accuracy ? 'bg-indigo-900/20 border-indigo-500/50' : 'bg-slate-900 border-slate-700 hover:border-slate-500'}`}>
+          <div onClick={() => toggleCheck('accuracy')} className={`p-4 rounded-xl border cursor-pointer transition-all ${checks.accuracy ? 'bg-orange-900/20 border-orange-500/50' : 'bg-zinc-800 border-zinc-700 hover:border-zinc-500'}`}>
             <div className="flex items-start gap-4">
-              <div className={`mt-1 w-6 h-6 rounded border flex items-center justify-center transition-colors ${checks.accuracy ? 'bg-indigo-600 border-indigo-600' : 'border-slate-500'}`}>
+              <div className={`mt-1 w-6 h-6 rounded border flex items-center justify-center transition-colors ${checks.accuracy ? 'bg-orange-600 border-orange-600' : 'border-zinc-500'}`}>
                 {checks.accuracy && <Check size={14} />}
               </div>
               <div>
-                <h3 className="font-bold text-sm mb-1 flex items-center gap-2">Data Accuracy <Scale size={14} className="text-slate-400" /></h3>
-                <p className="text-xs text-slate-400">
+                <h3 className="font-bold text-sm mb-1 flex items-center gap-2">Data Accuracy <Scale size={14} className="text-zinc-400" /></h3>
+                <p className="text-xs text-zinc-400">
                   I acknowledge that data is sourced from public listings and may contain errors. I will verify all figures independently.
                 </p>
               </div>
@@ -109,14 +109,14 @@ export const LegalGatekeeper = ({ onAccept }: { onAccept: () => void }) => {
           </div>
 
           {/* 5. Listing Data Use */}
-          <div onClick={() => toggleCheck('usage')} className={`p-4 rounded-xl border cursor-pointer transition-all ${checks.usage ? 'bg-indigo-900/20 border-indigo-500/50' : 'bg-slate-900 border-slate-700 hover:border-slate-500'}`}>
+          <div onClick={() => toggleCheck('usage')} className={`p-4 rounded-xl border cursor-pointer transition-all ${checks.usage ? 'bg-orange-900/20 border-orange-500/50' : 'bg-zinc-800 border-zinc-700 hover:border-zinc-500'}`}>
             <div className="flex items-start gap-4">
-              <div className={`mt-1 w-6 h-6 rounded border flex items-center justify-center transition-colors ${checks.usage ? 'bg-indigo-600 border-indigo-600' : 'border-slate-500'}`}>
+              <div className={`mt-1 w-6 h-6 rounded border flex items-center justify-center transition-colors ${checks.usage ? 'bg-orange-600 border-orange-600' : 'border-zinc-500'}`}>
                 {checks.usage && <Check size={14} />}
               </div>
               <div>
-                <h3 className="font-bold text-sm mb-1 flex items-center gap-2">Listing Data Use <Database size={14} className="text-slate-400" /></h3>
-                <p className="text-xs text-slate-400">
+                <h3 className="font-bold text-sm mb-1 flex items-center gap-2">Listing Data Use <Database size={14} className="text-zinc-400" /></h3>
+                <p className="text-xs text-zinc-400">
                   I agree to use this data for personal analysis only and will not scrape, resell, or redistribute it.
                 </p>
               </div>
@@ -125,11 +125,11 @@ export const LegalGatekeeper = ({ onAccept }: { onAccept: () => void }) => {
 
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-800 flex justify-end">
+        <div className="mt-8 pt-6 border-t border-zinc-800 flex justify-end">
           <button 
             onClick={onAccept} 
             disabled={!allChecked}
-            className={`px-8 py-3 rounded-xl font-bold text-sm transition-all ${allChecked ? 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg hover:shadow-indigo-500/25' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}`}
+            className={`px-8 py-3 rounded-xl font-bold text-sm transition-all ${allChecked ? 'bg-orange-600 text-white hover:bg-orange-500 shadow-lg hover:shadow-orange-500/25' : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'}`}
           >
             Accept & Continue
           </button>

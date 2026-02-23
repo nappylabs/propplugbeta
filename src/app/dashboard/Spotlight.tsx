@@ -38,7 +38,7 @@ export const Spotlight = () => {
           top: targetRect.top,
           width: targetRect.width,
           height: targetRect.height,
-          boxShadow: '0 0 0 9999px rgba(15, 23, 42, 0.8)',
+          boxShadow: '0 0 0 9999px rgba(24, 24, 27, 0.8)',
           borderRadius: '0.75rem', // same as the button
           pointerEvents: 'none',
         }}
@@ -46,7 +46,7 @@ export const Spotlight = () => {
       
       {/* The animated border to draw more attention */}
       <div
-        className="fixed border-2 border-dashed border-indigo-500 animate-pulse"
+        className="fixed border-2 border-dashed border-orange-500 animate-pulse"
         style={{
           left: targetRect.left - 4,
           top: targetRect.top - 4,
@@ -67,11 +67,11 @@ export const Spotlight = () => {
           left: targetRect.left + targetRect.width / 2,
           transform: 'translateX(-50%)',
         }}
-        className="bg-white text-[#0F172A] p-6 rounded-2xl shadow-2xl max-w-xs w-full z-[999]"
+        className="bg-white text-zinc-900 p-6 rounded-2xl shadow-2xl max-w-xs w-full z-[999]"
       >
-        <MousePointerClick size={24} className="text-indigo-500 mb-3" />
+        <MousePointerClick size={24} className="text-orange-500 mb-3" />
         <h3 className="font-black text-lg mb-2">Create Your First Analysis</h3>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-zinc-600">
           This is where the magic happens. Click here to start your first property analysis.
         </p>
       </motion.div>

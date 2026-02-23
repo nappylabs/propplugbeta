@@ -74,42 +74,42 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-[#020617]">
-      <div className="w-full max-w-sm bg-[#0F172A] rounded-2xl shadow-xl p-8 border border-slate-800">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-zinc-950">
+      <div className="w-full max-w-sm bg-zinc-900 rounded-2xl shadow-xl p-8 border border-zinc-800">
         <div className="flex flex-col items-center justify-center mb-6 text-white">
            <div className="h-12 flex items-center justify-center"><Logo /></div>
            <span className="text-2xl font-bold mt-2">PropPlug</span>
         </div>
         
         <h2 className="text-xl font-bold text-center text-white mb-1">Welcome back</h2>
-        <p className="text-xs text-center text-slate-400 mb-8">Sign in to access your dashboard</p>
+        <p className="text-xs text-center text-zinc-400 mb-8">Sign in to access your dashboard</p>
 
         {error && <p className="text-rose-500 text-xs text-center mb-4">{error}</p>}
 
-        <button onClick={signInWithGoogle} className="w-full flex items-center justify-center gap-3 bg-white border border-slate-700 hover:bg-slate-200 text-slate-800 font-semibold py-2.5 rounded-xl transition-all text-sm mb-6">
+        <button onClick={signInWithGoogle} className="w-full flex items-center justify-center gap-3 bg-white border border-zinc-700 hover:bg-zinc-200 text-zinc-800 font-semibold py-2.5 rounded-xl transition-all text-sm mb-6">
           <GoogleIcon className="w-4 h-4" />
           <span>Continue with Google</span>
         </button>
 
         <div className="relative mb-6">
-           <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-800"></div></div>
-           <div className="relative flex justify-center text-[10px] uppercase tracking-widest text-slate-600"><span className="bg-[#0F172A] px-2">Or email</span></div>
+           <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-zinc-800"></div></div>
+           <div className="relative flex justify-center text-[10px] uppercase tracking-widest text-zinc-600"><span className="bg-zinc-900 px-2">Or email</span></div>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
-          <input type="email" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-[#6366F1]" />
-          <input type="password" placeholder="Password" value={password} onChange={e=>setPassword(e.target.value)} className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-[#6366F1]" />
+          <input type="email" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-orange-500" />
+          <input type="password" placeholder="Password" value={password} onChange={e=>setPassword(e.target.value)} className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-orange-500" />
           <div className="flex justify-end">
-            <Link href="/forgot-password" className="text-xs text-slate-400 hover:text-[#6366F1] transition-colors">Forgot Password?</Link>
+            <Link href="/forgot-password" className="text-xs text-zinc-400 hover:text-orange-500 transition-colors">Forgot Password?</Link>
           </div>
-          <button type="submit" disabled={loading} className="w-full bg-[#6366F1] hover:bg-[#5558DD] text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-500/20 text-sm disabled:opacity-50">
+          <button type="submit" disabled={loading} className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-orange-500/20 text-sm disabled:opacity-50">
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
         
         <div className="mt-6 text-center">
-            <Link href="/signup" className="text-xs text-slate-400 hover:text-white transition-colors">
-                Don't have an account? <span className="text-[#6366F1]">Sign Up</span>
+            <Link href="/signup" className="text-xs text-zinc-400 hover:text-white transition-colors">
+                Don't have an account? <span className="text-orange-500">Sign Up</span>
             </Link>
         </div>
       </div>
@@ -119,7 +119,7 @@ function LoginContent() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#020617] flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6366F1]"></div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-zinc-950 flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div></div>}>
       <LoginContent />
     </Suspense>
   );

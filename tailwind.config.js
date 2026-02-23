@@ -5,12 +5,11 @@ module.exports = {
     extend: {
       colors: {
         prop: {
-          950: "#020617",      // Deepest Slate
-          dark: "#0F172A",     // Deep Navy
-          purple: "#6366F1",   // Primary Action Purple
-          accent: "#A5B4FC",   // Muted Lavender
+          950: "#09090b",      // Charcoal (zinc-950)
+          dark: "#18181b",     // Charcoal (zinc-900)
+          accent: "#F97316",   // Orange-Red (orange-500)
           surface: "#F8FAFC",  // High-legibility background
-        }
+        },
       },
       borderRadius: {
         '3xl': '1.5rem',

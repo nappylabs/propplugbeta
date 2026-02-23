@@ -9,17 +9,17 @@ interface ProgressBarProps {
 }
 
 const STATUS_COLORS = {
-  getting_started: 'bg-slate-600',
-  in_progress: 'bg-sky-500',
-  nearly_complete: 'bg-indigo-500',
+  getting_started: 'bg-zinc-600',
+  in_progress: 'bg-orange-400',
+  nearly_complete: 'bg-orange-500',
   complete: 'bg-emerald-500',
 };
 
 export const ProgressBar = ({ percentage, status }: ProgressBarProps) => {
-  const colorClass = STATUS_COLORS[status] || 'bg-slate-600';
+  const colorClass = STATUS_COLORS[status] || 'bg-zinc-600';
 
   return (
-    <div className="w-full bg-slate-800 rounded-full h-2.5">
+    <div className="w-full bg-zinc-800 rounded-full h-2.5">
       <div
         className={`${colorClass} h-2.5 rounded-full transition-all duration-500`}
         style={{ width: `${percentage}%` }}

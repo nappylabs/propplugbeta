@@ -5,7 +5,7 @@ import {
   AreaChart, Area, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
   CartesianGrid, ReferenceLine, Legend, PieChart, Pie, Cell
 } from 'recharts';
-import { Info, Edit3, AlertTriangle, Save, Shield, Share2, Mail, MessageCircle, Link as LinkIcon, MoreHorizontal, Check, Loader2, ExternalLink, Trash2, Plus, X, Brain, Star } from 'lucide-react';
+import { Info, Edit3, AlertTriangle, Save, Shield, Share2, Mail, MessageCircle, Link as LinkIcon, MoreHorizontal, Check, Loader2, ExternalLink, Trash2, Plus, X, Brain, Star, Bed, Bath, MapPin, Home, Car, Maximize } from 'lucide-react';
 import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc } from 'firebase/firestore';
 import { calculateAnalysis } from '@/shared/logic/analysis';
 import { DealInsights } from '@/types/insights';
@@ -70,11 +70,11 @@ const formatPercentage = (num: number): string => {
 
 const KpiCard = ({ label, value, valType, description, threshold, colorBehavior = 'default', prefix = "", isBlurred }: any) => {
   const getStatusClasses = () => {
-    const defaultClasses = { wrapper: "border-slate-800 bg-[#0F172A]", value: "text-white" };
+    const defaultClasses = { wrapper: "border-zinc-800 bg-zinc-900", value: "text-white" };
     const greenStyle = { wrapper: "bg-emerald-900/30 border-emerald-500/30", value: "text-emerald-400" };
     const amberStyle = { wrapper: "bg-amber-900/30 border-amber-500/30", value: "text-amber-400" };
     const redStyle = { wrapper: "bg-rose-900/30 border-rose-500/30", value: "text-rose-400" };
-    const blueStyle = { wrapper: "bg-sky-900/30 border-sky-500/30", value: "text-white" };
+    const blueStyle = { wrapper: "border-zinc-800 bg-zinc-900", value: "text-white" };
 
     switch (colorBehavior) {
       case 'cashflow':
@@ -110,14 +110,14 @@ const KpiCard = ({ label, value, valType, description, threshold, colorBehavior 
     <div className={`p-8 rounded-[2rem] border transition-all duration-300 relative group ${wrapperClass} ${blurClass}`}>
       {/* Knowledge Icon */}
       <div className="absolute top-6 right-6 cursor-help z-20">
-        <Info size={16} className="opacity-30 group-hover:opacity-100 transition-opacity text-slate-400" />
-        <div className="absolute right-0 top-8 w-72 p-5 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all z-50 text-xs text-slate-300 leading-relaxed backdrop-blur-xl">
+        <Info size={16} className="opacity-30 group-hover:opacity-100 transition-opacity text-zinc-400" />
+        <div className="absolute right-0 top-8 w-72 p-5 bg-zinc-950 border border-zinc-700 rounded-2xl shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all z-50 text-xs text-zinc-300 leading-relaxed backdrop-blur-xl">
           <p className="font-bold text-white mb-2 text-sm">{label} Guide</p>
           {description}
         </div>
       </div>
 
-      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 block mb-3">{label}</span>
+      <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block mb-3">{label}</span>
       <h3 className={`text-2xl font-black tracking-tighter ${valueClass}`}>
         {displayValue}
       </h3>
@@ -127,17 +127,17 @@ const KpiCard = ({ label, value, valType, description, threshold, colorBehavior 
 
 const AccordionCard = ({ title, summaryValue, summaryUnit, isOpen, onToggle, children }: { title: string, summaryValue: string, summaryUnit?: string, isOpen: boolean, onToggle: () => void, children: ReactNode }) => {
   return (
-    <div className={`bg-[#0F172A] border border-slate-800 rounded-[2rem] transition-all duration-300 ${isOpen ? 'shadow-premium border-[#6366F1]/40' : 'hover:-translate-y-1 hover:shadow-lg hover:border-slate-700'}`}>
+    <div className={`bg-zinc-900 border border-zinc-800 rounded-[2rem] transition-all duration-300 ${isOpen ? 'shadow-premium border-orange-500/40' : 'hover:-translate-y-1 hover:shadow-lg hover:border-zinc-700'}`}>
       <div className="p-6 cursor-pointer" onClick={onToggle}>
         <div className="flex justify-between items-center">
           <div>
-            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{title}</h4>
+            <h4 className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">{title}</h4>
             <p className="text-lg font-bold text-white tracking-tight">
               {summaryValue}
-              {summaryUnit && <span className="text-base text-slate-400 ml-1">{summaryUnit}</span>}
+              {summaryUnit && <span className="text-base text-zinc-400 ml-1">{summaryUnit}</span>}
             </p>
           </div>
-          <div className={`transform transition-transform duration-300 text-slate-600 ${isOpen ? 'rotate-180' : ''}`}>
+          <div className={`transform transition-transform duration-300 text-zinc-600 ${isOpen ? 'rotate-180' : ''}`}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -145,7 +145,7 @@ const AccordionCard = ({ title, summaryValue, summaryUnit, isOpen, onToggle, chi
         </div>
       </div>
       {isOpen && (
-        <div className="px-6 pb-6 pt-4 border-t border-slate-800 space-y-6">
+        <div className="px-6 pb-6 pt-4 border-t border-zinc-800 space-y-6">
           {children}
         </div>
       )}
@@ -191,23 +191,23 @@ const InputField = ({ label, value, onChange, type = "number", prefix, suffix, d
   return (
     <div className="relative">
       <label className={`block group/input ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`} onClick={handleClick}>
-        <span className="text-[10px] font-bold text-slate-500 uppercase mb-2 block group-hover/input:text-[#6366F1] transition-colors">{label}</span>
+        <span className="text-[10px] font-bold text-zinc-500 uppercase mb-2 block group-hover/input:text-orange-500 transition-colors">{label}</span>
         <div className="relative">
-          {prefix && <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-sm">{prefix}</span>}
+          {prefix && <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-bold text-sm">{prefix}</span>}
           <input 
             type={type === 'number' ? 'text' : type} 
             value={formatDisplayValue(value)} 
             disabled={disabled}
             onChange={handleChange} 
-            className={`w-full bg-[#1E293B] border border-slate-700 rounded-xl p-3 ${prefix ? 'pl-10' : ''} ${suffix ? 'pr-10' : ''} text-white font-bold outline-none focus:border-[#6366F1] focus:bg-slate-900 transition-all ${disabled ? 'pointer-events-none' : ''}`} 
+            className={`w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 ${prefix ? 'pl-10' : ''} ${suffix ? 'pr-10' : ''} text-white font-bold outline-none focus:border-orange-500 focus:bg-zinc-900 transition-all ${disabled ? 'pointer-events-none' : ''}`} 
           />
-          {suffix && <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-sm">{suffix}</span>}
+          {suffix && <span className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 font-bold text-sm">{suffix}</span>}
         </div>
       </label>
       {showTooltip && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-xl whitespace-nowrap z-50 animate-in fade-in zoom-in duration-200 pointer-events-none">
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-orange-600 text-white text-xs font-bold rounded-lg shadow-xl whitespace-nowrap z-50 animate-in fade-in zoom-in duration-200 pointer-events-none">
           Upgrade to Unlock
-          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-indigo-600"></div>
+          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-orange-600"></div>
         </div>
       )}
     </div>
@@ -243,18 +243,18 @@ const CurrencyWarningModal = ({ isOpen, onConfirm, onCancel }: { isOpen: boolean
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[#0F172A] p-8 rounded-2xl border border-slate-700 shadow-xl max-w-sm w-full text-center">
+    <div className="fixed inset-0 bg-zinc-900/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-zinc-900 p-8 rounded-2xl border border-zinc-700 shadow-xl max-w-sm w-full text-center">
         <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-amber-500/10 mb-4">
             <AlertTriangle className="h-6 w-6 text-amber-500" />
         </div>
         <h3 className="text-lg font-bold text-white mb-2">Change Currency?</h3>
-        <p className="text-slate-400 mb-8">Changing the currency is for presentation only and does not convert any values. Please ensure all values are correct for the new currency.</p>
+        <p className="text-zinc-400 mb-8">Changing the currency is for presentation only and does not convert any values. Please ensure all values are correct for the new currency.</p>
         <div className="flex justify-center gap-4">
-          <button onClick={onCancel} className="px-6 py-2 rounded-lg text-sm font-bold text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors">
+          <button onClick={onCancel} className="px-6 py-2 rounded-lg text-sm font-bold text-zinc-300 bg-zinc-800 hover:bg-zinc-700 transition-colors">
             Cancel
           </button>
-          <button onClick={onConfirm} className="px-6 py-2 rounded-lg text-sm font-bold bg-[#6366F1] text-white hover:bg-[#5558DD] transition-colors">
+          <button onClick={onConfirm} className="px-6 py-2 rounded-lg text-sm font-bold bg-orange-600 text-white hover:bg-orange-700 transition-colors">
             Continue
           </button>
         </div>
@@ -327,6 +327,12 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
     currency: 'ZAR',
     strategy: 'rental', // Default strategy
     customExpenses: [] as { id: string, name: string, value: string }[],
+    bedrooms: '',
+    bathrooms: '',
+    propertyType: '',
+    parking: '',
+    floorSize: '',
+    address: '',
     insights: null as DealInsights | null,
     ...initialData
   });
@@ -677,12 +683,12 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
       />
       {/* Persona Switcher */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div className="flex bg-[#0F172A] p-1.5 rounded-2xl border border-slate-800">
+        <div className="flex bg-zinc-900 p-1.5 rounded-2xl border border-zinc-800">
             {['investor', 'owner', 'tenant'].map((p) => (
                 <button 
                     key={p}
                     onClick={() => setPersona(p as UserPersona)}
-                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${persona === p ? 'bg-[#6366F1] text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${persona === p ? 'bg-orange-500 text-white shadow-lg' : 'text-zinc-500 hover:text-white'}`}
                 >
                     {p}
                 </button>
@@ -693,13 +699,13 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
             <div className="flex gap-2">
                 <button 
                     onClick={() => setInvestorMode('rental')}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${investorMode === 'rental' ? 'bg-[#6366F1]/10 border-[#6366F1] text-[#6366F1]' : 'border-slate-700 text-slate-400'}`}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${investorMode === 'rental' ? 'bg-orange-500/10 border-orange-500 text-orange-500' : 'border-zinc-700 text-zinc-400'}`}
                 >
                     Rental
                 </button>
                 <button 
                     onClick={() => setInvestorMode('flip')}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${investorMode === 'flip' ? 'bg-[#6366F1]/10 border-[#6366F1] text-[#6366F1]' : 'border-slate-700 text-slate-400'}`}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${investorMode === 'flip' ? 'bg-orange-500/10 border-orange-500 text-orange-500' : 'border-zinc-700 text-zinc-400'}`}
                 >
                     Flip
                 </button>
@@ -713,7 +719,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     value={inputs.currency}
                     onChange={(e) => handleCurrencyChange(e.target.value as Currency)}
                     disabled={readOnly}
-                    className="bg-[#0F172A] border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-bold text-white appearance-none focus:outline-none focus:border-indigo-500 text-center"
+                    className="bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2.5 text-xs font-bold text-white appearance-none focus:outline-none focus:border-orange-500 text-center"
                 >
                     <option value="ZAR">ZAR (R)</option>
                     <option value="KES">KES (KSh)</option>
@@ -725,7 +731,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
             <button 
               id="deal-insights-btn"
               onClick={() => setIsInsightsOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-slate-200 rounded-xl font-bold text-xs hover:bg-slate-700 transition-colors border border-slate-700"
+              className="flex items-center gap-2 px-4 py-2 bg-zinc-800 text-zinc-200 rounded-xl font-bold text-xs hover:bg-zinc-700 transition-colors border border-zinc-700"
             >
               <Brain size={14} />
               <span className="hidden sm:inline">Deal Insights</span>
@@ -733,13 +739,13 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
 
             {/* Autosave Indicator */}
             {user && !isActionDisabled && (
-                <div className="group flex items-center justify-center w-8 h-8 rounded-full bg-slate-800 border border-slate-700 mr-2 cursor-help relative">
+                <div className="group flex items-center justify-center w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 mr-2 cursor-help relative">
                     {autosaveStatus === 'saving' ? (
-                        <Loader2 size={14} className="text-slate-400 animate-spin" />
+                        <Loader2 size={14} className="text-zinc-400 animate-spin" />
                     ) : (
                         <Check size={14} className="text-emerald-500" />
                     )}
-                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-zinc-950 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                         {autosaveStatus === 'saving' ? 'Saving...' : 'All changes saved'}
                     </div>
                 </div>
@@ -752,13 +758,13 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     href={inputs.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-slate-200 rounded-xl font-bold text-xs hover:bg-slate-700 transition-colors border border-slate-700"
+                    className="flex items-center gap-2 px-4 py-2 bg-zinc-800 text-zinc-200 rounded-xl font-bold text-xs hover:bg-zinc-700 transition-colors border border-zinc-700"
                 >
                     <ExternalLink size={14} />
                     <span className="hidden sm:inline">Deal Source</span>
                 </a>
             ) : (
-                <div className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 text-slate-400 rounded-xl font-bold text-xs border border-slate-800 cursor-default">
+                <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 text-zinc-400 rounded-xl font-bold text-xs border border-zinc-800 cursor-default">
                     <span className="hidden sm:inline">Manual</span>
                 </div>
             )}
@@ -767,25 +773,25 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
             <div className="relative">
                 <button 
                     onClick={() => setIsShareOpen(!isShareOpen)}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-slate-200 rounded-xl font-bold text-xs hover:bg-slate-700 transition-colors border border-slate-700"
+                    className="flex items-center gap-2 px-4 py-2 bg-zinc-800 text-zinc-200 rounded-xl font-bold text-xs hover:bg-zinc-700 transition-colors border border-zinc-700"
                 >
                     <Share2 size={14} />
                     Share
                 </button>
                 
                 {isShareOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-48 bg-[#0F172A] border border-slate-700 rounded-xl shadow-xl overflow-hidden z-50 flex flex-col">
-                        <button onClick={() => handleShare('email')} className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 hover:text-white text-xs font-bold transition-colors text-left">
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-zinc-900 border border-zinc-700 rounded-xl shadow-xl overflow-hidden z-50 flex flex-col">
+                        <button onClick={() => handleShare('email')} className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:bg-zinc-800 hover:text-white text-xs font-bold transition-colors text-left">
                             <Mail size={14} /> Email
                         </button>
-                        <button onClick={() => handleShare('whatsapp')} className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 hover:text-white text-xs font-bold transition-colors text-left border-t border-slate-800">
+                        <button onClick={() => handleShare('whatsapp')} className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:bg-zinc-800 hover:text-white text-xs font-bold transition-colors text-left border-t border-zinc-800">
                             <MessageCircle size={14} /> WhatsApp
                         </button>
-                        <button onClick={() => handleShare('copy')} className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 hover:text-white text-xs font-bold transition-colors text-left border-t border-slate-800">
+                        <button onClick={() => handleShare('copy')} className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:bg-zinc-800 hover:text-white text-xs font-bold transition-colors text-left border-t border-zinc-800">
                             {isCopied ? <Check size={14} className="text-emerald-500" /> : <LinkIcon size={14} />} 
                             {isCopied ? 'Copied!' : 'Copy Link'}
                         </button>
-                        <button onClick={() => handleShare('native')} className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-800 hover:text-white text-xs font-bold transition-colors text-left border-t border-slate-800 sm:hidden">
+                        <button onClick={() => handleShare('native')} className="flex items-center gap-3 px-4 py-3 text-zinc-300 hover:bg-zinc-800 hover:text-white text-xs font-bold transition-colors text-left border-t border-zinc-800 sm:hidden">
                             <MoreHorizontal size={14} /> More Options...
                         </button>
                     </div>
@@ -796,7 +802,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                 <button 
                     onClick={() => handleSave()}
                     disabled={isSaving}
-                    className="flex items-center gap-2 px-6 py-2 bg-white text-slate-900 rounded-xl font-bold text-xs hover:bg-slate-200 transition-colors disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-2 bg-white text-zinc-900 rounded-xl font-bold text-xs hover:bg-zinc-200 transition-colors disabled:opacity-50"
                 >
                     <Save size={14} />
                     {isSaving ? 'Saving...' : 'Save Project'}
@@ -804,6 +810,50 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
             )}
         </div>
       </div>
+
+      {/* Property Specs Header (Visible if data exists) */}
+      {(inputs.bedrooms || inputs.bathrooms || inputs.propertyType || inputs.address || inputs.floorSize || inputs.parking) && (
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-zinc-400 animate-fade-in">
+            {inputs.address && (
+                <div className="flex items-center gap-2 font-bold text-zinc-300">
+                    <MapPin size={16} />
+                    {inputs.address}
+                </div>
+            )}
+            {(inputs.address && (inputs.propertyType || inputs.bedrooms)) && <div className="h-4 w-[1px] bg-zinc-800 hidden sm:block"></div>}
+            
+            {inputs.propertyType && (
+                <div className="flex items-center gap-2">
+                    <Home size={16} />
+                    <span className="capitalize">{inputs.propertyType}</span>
+                </div>
+            )}
+            {inputs.bedrooms && (
+                <div className="flex items-center gap-2">
+                    <Bed size={16} />
+                    <span>{inputs.bedrooms}</span>
+                </div>
+            )}
+            {inputs.bathrooms && (
+                <div className="flex items-center gap-2">
+                    <Bath size={16} />
+                    <span>{inputs.bathrooms}</span>
+                </div>
+            )}
+            {inputs.parking && (
+                <div className="flex items-center gap-2">
+                    <Car size={16} />
+                    <span>{inputs.parking}</span>
+                </div>
+            )}
+            {inputs.floorSize && (
+                <div className="flex items-center gap-2">
+                    <Maximize size={16} />
+                    <span>{inputs.floorSize}</span>
+                </div>
+            )}
+        </div>
+      )}
 
       {/* --- INVESTOR: RENTAL MODE --- */}
       {persona === 'investor' && investorMode === 'rental' && (
@@ -840,11 +890,11 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
             </div>
 
             <div className={isInvestorLocked ? 'blur-lg pointer-events-none' : ''}>
-              <div className="bg-[#0F172A] border border-slate-800 p-8 rounded-[2.5rem] h-[400px] relative">
+              <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-[2.5rem] h-[400px] relative">
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-white font-bold uppercase tracking-widest text-xs opacity-50">10-Year Wealth Accumulation</h3>
                     {!isInvestorLocked && (
-                        <button id="edit-assumptions-btn" onClick={handleScrollToAssumptions} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <button id="edit-assumptions-btn" onClick={handleScrollToAssumptions} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white">
                             <Edit3 size={12} />
                             Edit Assumptions
                         </button>
@@ -857,7 +907,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                         <button
                             key={key}
                             onClick={() => setChartMetric(key as any)}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${chartMetric === key ? 'bg-slate-800 text-white border-slate-600' : 'border-transparent text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'}`}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${chartMetric === key ? 'bg-zinc-800 text-white border-zinc-600' : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'}`}
                         >
                             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: config.color }} />
                             {config.label}
@@ -873,11 +923,11 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                                 <stop offset="95%" stopColor={chartConfig[chartMetric].color} stopOpacity={0}/>
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
                         <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontWeight: 500, fontSize: 11 }} label={{ value: 'Years', position: 'insideBottom', offset: -15, fill: '#94a3b8', fontSize: 11, fontWeight: 500 }} />
                         <YAxis hide={true} axisLine={false} tickLine={false} width={10} />
                         <Tooltip 
-                            contentStyle={{backgroundColor: '#0F172A', border: '1px solid #1E293B', borderRadius: '12px'}} 
+                            contentStyle={{backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px'}} 
                             formatter={(value: number) => [chartMetric === 'yield' ? `${value}%` : `${currencySymbol} ${formatNumber(value)}`, chartConfig[chartMetric].label]}
                             itemStyle={{ color: '#e2e8f0' }}
                             labelStyle={{ color: '#94a3b8' }}
@@ -890,7 +940,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                             strokeWidth={3} 
                             fill={`url(#color${chartMetric})`} 
                             animationDuration={500} 
-                            dot={{ r: 4, fill: chartConfig[chartMetric].color, stroke: '#0F172A', strokeWidth: 2 }}
+                            dot={{ r: 4, fill: chartConfig[chartMetric].color, stroke: '#18181b', strokeWidth: 2 }}
                             activeDot={{ r: 6, fill: chartConfig[chartMetric].color, stroke: '#fff' }}
                             label={<CustomizedLabel formatter={(value: number) => chartMetric === 'yield' ? `${value.toFixed(1)}%` : `${currencySymbol} ${formatNumber(value)}`} />}
                         />
@@ -930,7 +980,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     onToggle={() => setActiveAccordion(activeAccordion === 'rental' ? null : 'rental')}
                 >
                     <InputField label="Gross Monthly Rent" value={inputs.monthlyRent} onChange={(v: string) => handleInputChange('monthlyRent', v)} prefix={currencySymbol} disabled={isInvestorLocked} />
-                    <div className="pt-4 mt-4 border-t border-slate-800 space-y-3">
+                    <div className="pt-4 mt-4 border-t border-zinc-800 space-y-3">
                         <div className="flex items-center gap-2">
                             <div className="flex-grow"><InputField label="Vacancy Provision" value={inputs.vacancyPercent} onChange={(v: string) => handleInputChange('vacancyPercent', v)} suffix="%" disabled={isInvestorLocked} /></div>
                             <input type="checkbox" checked={inputs.includeVacancy} onChange={e => setInputs({...inputs, includeVacancy: e.target.checked})} className="mt-6" disabled={isInvestorLocked} />
@@ -952,8 +1002,8 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     <InputField label="Insurance" value={inputs.insurance} onChange={(v: string) => handleInputChange('insurance', v)} prefix={currencySymbol} disabled={isInvestorLocked} />
                     <InputField label="Annual Cost Escalation" value={inputs.inflationRate} onChange={(v: string) => handleInputChange('inflationRate', v)} suffix="%" disabled={isInvestorLocked} />
                     
-                    <div className="pt-4 mt-2 border-t border-slate-800">
-                        <h5 className="text-[10px] font-bold text-slate-500 uppercase mb-3">Provisions</h5>
+                    <div className="pt-4 mt-2 border-t border-zinc-800">
+                        <h5 className="text-[10px] font-bold text-zinc-500 uppercase mb-3">Provisions</h5>
                         <div className="space-y-3">
                             <div className="flex items-center gap-2">
                                 <div className="flex-grow"><InputField label="Maintenance Provision" value={inputs.maintenancePercentRent} onChange={(v: string) => handleInputChange('maintenancePercentRent', v)} suffix="%" disabled={isInvestorLocked} /></div>
@@ -1008,11 +1058,11 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
             </div>
 
             <div className={isInvestorLocked ? 'blur-lg pointer-events-none' : ''}>
-              <div className="bg-[#0F172A] border border-slate-800 p-8 rounded-[2.5rem] h-[450px] relative">
+              <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-[2.5rem] h-[450px] relative">
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-white font-bold uppercase tracking-widest text-xs opacity-50">Profit Burn Analysis</h3>
                     {!isInvestorLocked && (
-                        <button id="edit-assumptions-btn" onClick={handleScrollToFlipAssumptions} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <button id="edit-assumptions-btn" onClick={handleScrollToFlipAssumptions} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white">
                             <Edit3 size={12} />
                             Edit Assumptions
                         </button>
@@ -1023,7 +1073,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                         <button
                             key={key}
                             onClick={() => setFlipChartMetric(key as any)}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${flipChartMetric === key ? 'bg-slate-800 text-white border-slate-600' : 'border-transparent text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'}`}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${flipChartMetric === key ? 'bg-zinc-800 text-white border-zinc-600' : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'}`}
                         >
                             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: config.color }} />
                             {config.label}
@@ -1038,11 +1088,11 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                                 <stop offset="95%" stopColor={flipChartConfig[flipChartMetric].color} stopOpacity={0}/>
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
                         <XAxis dataKey="month" tickFormatter={(tick) => `M${tick}`} axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontWeight: 500, fontSize: 11 }} label={{ value: 'Months', position: 'insideBottom', offset: -15, fill: '#94a3b8', fontSize: 11, fontWeight: 500 }} />
                         <YAxis hide={true} axisLine={false} tickLine={false} width={10} />
                         <Tooltip 
-                            contentStyle={{backgroundColor: '#0F172A', border: '1px solid #1E293B', borderRadius: '12px'}} 
+                            contentStyle={{backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px'}} 
                             formatter={(val: number) => [`${currencySymbol} ${formatNumber(val)}`, flipChartConfig[flipChartMetric].label]} 
                             itemStyle={{ color: '#e2e8f0' }}
                             labelStyle={{ color: '#94a3b8' }}
@@ -1056,7 +1106,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                             strokeWidth={3} 
                             fill={`url(#color${flipChartMetric})`} 
                             animationDuration={500} 
-                            dot={{ r: 3, fill: flipChartConfig[flipChartMetric].color, stroke: '#0F172A', strokeWidth: 2 }}
+                            dot={{ r: 3, fill: flipChartConfig[flipChartMetric].color, stroke: '#18181b', strokeWidth: 2 }}
                             activeDot={{ r: 5, fill: flipChartConfig[flipChartMetric].color, stroke: '#fff' }}
                             label={<CustomizedLabel formatter={(value: number) => `${currencySymbol} ${formatNumber(value)}`} />}
                         />
@@ -1128,20 +1178,20 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                 />
             </div>
             <div>
-              <div className="bg-[#0F172A] border border-slate-800 p-8 rounded-[2.5rem] flex flex-col items-center justify-center text-center space-y-6 min-h-[300px]">
+              <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-[2.5rem] flex flex-col items-center justify-center text-center space-y-6 min-h-[300px]">
                   <Shield size={80} fill={analysis.owner.maxRate - inputs.interestRate > 2 ? "#10B981" : "#F43F5E"} className={analysis.owner.maxRate - inputs.interestRate > 2 ? "text-emerald-600" : "text-rose-600"} />
                   <div>
                       <h3 className="text-2xl font-bold text-white">Interest Rate Shield</h3>
-                      <p className="text-slate-400 mt-2 max-w-md">You can afford interest rates up to <span className="text-white font-bold">{analysis.owner.maxRate.toFixed(2)}%</span> before your housing costs exceed 45% of your income.</p>
+                      <p className="text-zinc-400 mt-2 max-w-md">You can afford interest rates up to <span className="text-white font-bold">{analysis.owner.maxRate.toFixed(2)}%</span> before your housing costs exceed 45% of your income.</p>
                   </div>
               </div>
 
-              <div className={`bg-[#0F172A] border border-slate-800 p-8 rounded-[2.5rem] h-[450px] relative mt-8 ${isAdvancedLocked ? 'blur-lg pointer-events-none' : ''}`}>
+              <div className={`bg-zinc-900 border border-zinc-800 p-8 rounded-[2.5rem] h-[450px] relative mt-8 ${isAdvancedLocked ? 'blur-lg pointer-events-none' : ''}`}>
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center gap-4">
                         <h3 className="text-white font-bold uppercase tracking-widest text-xs opacity-50">Equity Builder (10 Years)</h3>
-                        <div className="flex items-center gap-2 bg-slate-800/50 rounded-lg px-3 py-1 border border-slate-700">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase">Appreciation</span>
+                        <div className="flex items-center gap-2 bg-zinc-800/50 rounded-lg px-3 py-1 border border-zinc-700">
+                            <span className="text-[10px] font-bold text-zinc-400 uppercase">Appreciation</span>
                             <input 
                                 type="number" 
                                 value={inputs.propertyAppreciationRate}
@@ -1149,11 +1199,11 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                                 onChange={(e) => handleInputChange('propertyAppreciationRate', e.target.value)}
                                 className="w-12 bg-transparent text-white font-bold text-xs outline-none text-right"
                             />
-                            <span className="text-xs text-slate-500">%</span>
+                            <span className="text-xs text-zinc-500">%</span>
                         </div>
                     </div>
                     {!isAdvancedLocked && (
-                        <button id="edit-assumptions-btn" onClick={handleScrollToOwnerAssumptions} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <button id="edit-assumptions-btn" onClick={handleScrollToOwnerAssumptions} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white">
                             <Edit3 size={12} />
                             Edit Assumptions
                         </button>
@@ -1164,15 +1214,15 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     <AreaChart data={analysis.owner.series} margin={{ top: 5, right: 30, left: 10, bottom: 20 }}>
                         <defs>
                             <linearGradient id="colorOwnerEquity" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#6366F1" stopOpacity={0.3}/>
-                                <stop offset="95%" stopColor="#6366F1" stopOpacity={0}/>
+                                <stop offset="5%" stopColor="#F97316" stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor="#F97316" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
                         <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontWeight: 500, fontSize: 11 }} label={{ value: 'Years', position: 'insideBottom', offset: -15, fill: '#94a3b8', fontSize: 11, fontWeight: 500 }} />
                         <YAxis hide={true} axisLine={false} tickLine={false} width={10} />
                         <Tooltip 
-                            contentStyle={{backgroundColor: '#0F172A', border: '1px solid #1E293B', borderRadius: '12px'}} 
+                            contentStyle={{backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px'}} 
                             formatter={(value: number) => [`${currencySymbol} ${formatNumber(value)}`, 'Net Equity']}
                             itemStyle={{ color: '#e2e8f0' }}
                             labelStyle={{ color: '#94a3b8' }}
@@ -1181,23 +1231,23 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                         <Area 
                             type="monotone" 
                             dataKey="equity" 
-                            stroke="#6366F1" 
+                            stroke="#F97316" 
                             strokeWidth={3} 
                             fill="url(#colorOwnerEquity)" 
                             animationDuration={500} 
-                            dot={{ r: 4, fill: '#6366F1', stroke: '#0F172A', strokeWidth: 2 }}
-                            activeDot={{ r: 6, fill: '#6366F1', stroke: '#fff' }}
+                            dot={{ r: 4, fill: '#F97316', stroke: '#18181b', strokeWidth: 2 }}
+                            activeDot={{ r: 6, fill: '#F97316', stroke: '#fff' }}
                             label={<CustomizedLabel formatter={(value: number) => `${currencySymbol} ${formatNumber(value)}`} />}
                         />
                     </AreaChart>
                 </ResponsiveContainer>
               </div>
 
-              <div className={`bg-[#0F172A] border border-slate-800 p-8 rounded-[2.5rem] h-[550px] mt-8 ${readOnly ? 'blur-lg pointer-events-none' : ''}`}>
+              <div className={`bg-zinc-900 border border-zinc-800 p-8 rounded-[2.5rem] h-[550px] mt-8 ${readOnly ? 'blur-lg pointer-events-none' : ''}`}>
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-white font-bold uppercase tracking-widest text-xs opacity-50">Monthly Budget Breakdown</h3>
                     {!readOnly && (
-                        <button id="edit-assumptions-btn" onClick={handleScrollToOwnerAssumptions} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <button id="edit-assumptions-btn" onClick={handleScrollToOwnerAssumptions} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white">
                             <Edit3 size={12} />
                             Edit Assumptions
                         </button>
@@ -1223,7 +1273,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                             })}
                         </Pie>
                         <Tooltip 
-                            contentStyle={{backgroundColor: '#0F172A', border: '1px solid #1E293B', borderRadius: '12px'}} 
+                            contentStyle={{backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px'}} 
                             itemStyle={{ color: '#e2e8f0' }}
                             formatter={(value: number, name: string) => {
                                 const total = analysis.owner.budgetBreakdown.reduce((sum: number, entry: any) => sum + entry.value, 0);
@@ -1277,7 +1327,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     <InputField label="Transport" value={inputs.transport} onChange={(v: string) => handleInputChange('transport', v)} prefix={currencySymbol} disabled={readOnly} />
                     <InputField label="Groceries" value={inputs.groceries} onChange={(v: string) => handleInputChange('groceries', v)} prefix={currencySymbol} disabled={readOnly} />
                     <InputField label="Other Essentials" value={inputs.otherEssentials} onChange={(v: string) => handleInputChange('otherEssentials', v)} prefix={currencySymbol} disabled={readOnly} />
-                    <div className="pt-4 mt-2 border-t border-slate-800">
+                    <div className="pt-4 mt-2 border-t border-zinc-800">
                         <div className="flex items-center gap-2">
                             <div className="flex-grow"><InputField label="Maintenance (of Value)" value={inputs.maintenancePercentValue} onChange={(v: string) => handleInputChange('maintenancePercentValue', v)} suffix="%" disabled={readOnly} /></div>
                             <input type="checkbox" checked={inputs.includeMaintenance} onChange={e => setInputs({...inputs, includeMaintenance: e.target.checked})} className="mt-6" disabled={readOnly} />
@@ -1285,17 +1335,17 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     </div>
                     
                     {/* Custom Expenses Section */}
-                    <div className="pt-4 mt-2 border-t border-slate-800">
+                    <div className="pt-4 mt-2 border-t border-zinc-800">
                         <div className="flex justify-between items-center mb-3">
-                            <h5 className="text-[10px] font-bold text-slate-500 uppercase">Custom Expenses</h5>
-                            {!readOnly && <button onClick={addCustomExpense} className="p-1 bg-slate-800 rounded-full text-slate-400 hover:text-white hover:bg-indigo-600 transition-colors"><Plus size={14} /></button>}
+                            <h5 className="text-[10px] font-bold text-zinc-500 uppercase">Custom Expenses</h5>
+                            {!readOnly && <button onClick={addCustomExpense} className="p-1 bg-zinc-800 rounded-full text-zinc-400 hover:text-white hover:bg-orange-600 transition-colors"><Plus size={14} /></button>}
                         </div>
                         <div className="space-y-3">
                             {inputs.customExpenses?.map((expense: any) => (
                                 <div key={expense.id} className="flex gap-2 items-center">
-                                    <input type="text" placeholder="Name" value={expense.name} onChange={(e) => updateCustomExpense(expense.id, 'name', e.target.value)} disabled={readOnly} className="w-1/2 bg-[#1E293B] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-[#6366F1]" />
-                                    <input type="number" placeholder="Amount" value={expense.value} onChange={(e) => updateCustomExpense(expense.id, 'value', e.target.value)} disabled={readOnly} className="w-1/3 bg-[#1E293B] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-[#6366F1]" />
-                                    {!readOnly && <button onClick={() => removeCustomExpense(expense.id)} className="text-slate-500 hover:text-rose-500"><X size={14} /></button>}
+                                    <input type="text" placeholder="Name" value={expense.name} onChange={(e) => updateCustomExpense(expense.id, 'name', e.target.value)} disabled={readOnly} className="w-1/2 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-orange-500" />
+                                    <input type="number" placeholder="Amount" value={expense.value} onChange={(e) => updateCustomExpense(expense.id, 'value', e.target.value)} disabled={readOnly} className="w-1/3 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-orange-500" />
+                                    {!readOnly && <button onClick={() => removeCustomExpense(expense.id)} className="text-zinc-500 hover:text-rose-500"><X size={14} /></button>}
                                 </div>
                             ))}
                         </div>
@@ -1344,11 +1394,11 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                 />
             </div>
             <div>
-              <div className={`bg-[#0F172A] border border-slate-800 p-8 rounded-[2.5rem] h-[550px] ${readOnly ? 'blur-lg pointer-events-none' : ''}`}>
+              <div className={`bg-zinc-900 border border-zinc-800 p-8 rounded-[2.5rem] h-[550px] ${readOnly ? 'blur-lg pointer-events-none' : ''}`}>
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-white font-bold uppercase tracking-widest text-xs opacity-50">Monthly Budget Breakdown</h3>
                     {!readOnly && (
-                        <button id="edit-assumptions-btn" onClick={handleScrollToTenantAssumptions} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <button id="edit-assumptions-btn" onClick={handleScrollToTenantAssumptions} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white">
                             <Edit3 size={12} />
                             Edit Assumptions
                         </button>
@@ -1374,7 +1424,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                             })}
                         </Pie>
                         <Tooltip 
-                            contentStyle={{backgroundColor: '#0F172A', border: '1px solid #1E293B', borderRadius: '12px'}} 
+                            contentStyle={{backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px'}} 
                             itemStyle={{ color: '#e2e8f0' }}
                             formatter={(value: number, name: string) => {
                                 const total = analysis.tenant.budgetBreakdown.reduce((sum, entry) => sum + entry.value, 0);
@@ -1418,17 +1468,17 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     <InputField label="Other Essentials" value={inputs.otherEssentials} onChange={(v: string) => handleInputChange('otherEssentials', v)} prefix={currencySymbol} disabled={readOnly} />
                     
                     {/* Custom Expenses Section */}
-                    <div className="pt-4 mt-2 border-t border-slate-800">
+                    <div className="pt-4 mt-2 border-t border-zinc-800">
                         <div className="flex justify-between items-center mb-3">
-                            <h5 className="text-[10px] font-bold text-slate-500 uppercase">Custom Expenses</h5>
-                            {!readOnly && <button onClick={addCustomExpense} className="p-1 bg-slate-800 rounded-full text-slate-400 hover:text-white hover:bg-indigo-600 transition-colors"><Plus size={14} /></button>}
+                            <h5 className="text-[10px] font-bold text-zinc-500 uppercase">Custom Expenses</h5>
+                            {!readOnly && <button onClick={addCustomExpense} className="p-1 bg-zinc-800 rounded-full text-zinc-400 hover:text-white hover:bg-orange-600 transition-colors"><Plus size={14} /></button>}
                         </div>
                         <div className="space-y-3">
                             {inputs.customExpenses?.map((expense: any) => (
                                 <div key={expense.id} className="flex gap-2 items-center">
-                                    <input type="text" placeholder="Name" value={expense.name} onChange={(e) => updateCustomExpense(expense.id, 'name', e.target.value)} disabled={readOnly} className="w-1/2 bg-[#1E293B] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-[#6366F1]" />
-                                    <input type="number" placeholder="Amount" value={expense.value} onChange={(e) => updateCustomExpense(expense.id, 'value', e.target.value)} disabled={readOnly} className="w-1/3 bg-[#1E293B] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-[#6366F1]" />
-                                    {!readOnly && <button onClick={() => removeCustomExpense(expense.id)} className="text-slate-500 hover:text-rose-500"><X size={14} /></button>}
+                                    <input type="text" placeholder="Name" value={expense.name} onChange={(e) => updateCustomExpense(expense.id, 'name', e.target.value)} disabled={readOnly} className="w-1/2 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-orange-500" />
+                                    <input type="number" placeholder="Amount" value={expense.value} onChange={(e) => updateCustomExpense(expense.id, 'value', e.target.value)} disabled={readOnly} className="w-1/3 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-orange-500" />
+                                    {!readOnly && <button onClick={() => removeCustomExpense(expense.id)} className="text-zinc-500 hover:text-rose-500"><X size={14} /></button>}
                                 </div>
                             ))}
                         </div>
