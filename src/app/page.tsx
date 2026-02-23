@@ -240,6 +240,9 @@ export default function LandingPage() {
             <ul className="space-y-4 text-slate-400 text-sm font-bold">
               <li className="hover:text-white cursor-pointer">About Us</li>
               <li>
+                <Link href="/support" className="hover:text-white cursor-pointer transition-colors">Get in Touch</Link>
+              </li>
+              <li>
                 <Link href="/privacy" className="hover:text-white cursor-pointer transition-colors">Privacy Policy</Link>
               </li>
               <li>
