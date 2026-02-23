@@ -7,6 +7,7 @@ import {
   Twitter, Linkedin, Github
 } from 'lucide-react';
 import Link from 'next/link';
+import { CookieConsent } from '@/components/CookieConsent';
 
 const FALLBACK_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='100%25' height='100%25' fill='%23e2e8f0'/%3E%3C/svg%3E";
 
@@ -15,6 +16,7 @@ export default function LandingPage() {
   const [activeProfile, setActiveProfile] = useState('investor');
   const [isAnnual, setIsAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [showCookieSettings, setShowCookieSettings] = useState(false);
 
   // --- DATA OBJECTS ---
   const benefits = [
@@ -34,7 +36,7 @@ export default function LandingPage() {
     { q: "Is the data accurate for the South African market?", a: "Yes. PropPlug is specifically calibrated for SA lending rates, transfer duties, and property taxes. We sync directly with SARB interest rate trends." },
     { q: "Do I need a paid account to use the Chrome Extension?", a: "The extension is free to install and use for live screening. Saving deals and deep-dashboard analysis require a Core subscription." },
     { q: "Can I cancel my subscription anytime?", a: "Absolutely. No contracts, no friction. You can switch between monthly and annual plans or cancel directly from your dashboard." },
-    { q: "Does it work on international sites?", a: "While we support global currency detection, our deep logic (tax/levies) is currently optimized for South Africa, the UK, and Kenya." }
+    { q: "Does it work on international sites?", a: "While we support global currency detection, our deep logic (tax/levies) is currently optimized for South Africa and the UK." }
   ];
 
   return (
@@ -243,6 +245,12 @@ export default function LandingPage() {
               <li>
                 <Link href="/terms" className="hover:text-white cursor-pointer transition-colors">Terms of Service</Link>
               </li>
+              <li>
+                <Link href="/cookies" className="hover:text-white cursor-pointer transition-colors">Cookie Policy</Link>
+              </li>
+              <li>
+                <button onClick={() => setShowCookieSettings(true)} className="hover:text-white cursor-pointer transition-colors text-left">Manage Cookies</button>
+              </li>
             </ul>
           </div>
           <div className="bg-zinc-800/50 p-8 rounded-[2.5rem] border border-zinc-700">
@@ -258,6 +266,7 @@ export default function LandingPage() {
           © 2026 PropPlug. All rights reserved.
         </div>
       </footer>
+      <CookieConsent manualOpen={showCookieSettings} onClose={() => setShowCookieSettings(false)} />
     </div>
   );
 }

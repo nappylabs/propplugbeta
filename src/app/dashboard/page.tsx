@@ -47,6 +47,91 @@ const DeleteConfirmationModal = ({ isOpen, onConfirm, onCancel }: { isOpen: bool
   );
 };
 
+const EmptyState = ({ type, onAction }: { type: string, onAction: () => void }) => (
+    <div className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl">
+        <p className="text-zinc-500 mb-4">No {type}s saved yet.</p>
+        <button onClick={onAction} className="text-orange-500 font-bold hover:underline">Create your first one</button>
+    </div>
+);
+
+const ProjectCard = ({ project, onProjectClick, onRequestDelete }: any) => {
+    const snapshot = project.inputSnapshot || {};
+    const title = project.projectName || snapshot.projectName || 'Untitled Project';
+    const showAddress = snapshot.address;
+    const hasFooterContent = (snapshot.bedrooms || snapshot.bathrooms || snapshot.propertyType) || snapshot.insights?.progress;
+
+    return (
+        <div onClick={() => onProjectClick(project)} className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-orange-500 cursor-pointer transition-all group flex flex-col h-full">
+            <div className="flex justify-between items-start mb-4">
+                <div className="flex flex-wrap gap-2">
+                    <span className="px-2 py-1 bg-zinc-800 rounded text-[10px] font-bold text-zinc-400 uppercase tracking-wider">{snapshot.type || 'Investor'}</span>
+                    {snapshot.type === 'investor' && <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${snapshot.strategy === 'flip' ? 'bg-amber-900/30 text-amber-500' : 'bg-emerald-900/30 text-emerald-500'}`}>{snapshot.strategy === 'flip' ? 'Flip' : 'Rental'}</span>}
+                </div>
+                <button onClick={(e) => onRequestDelete(project.id, e)} className="p-2 -m-2 text-zinc-500 hover:text-rose-500 transition-colors z-10" title="Delete Project"><Trash2 size={14} /></button>
+            </div>
+            
+            <h3 className="text-white font-bold text-lg mb-1 group-hover:text-orange-500 transition-colors truncate">{title}</h3>
+            
+            {showAddress && (
+                <div className="flex items-center gap-1 text-zinc-500 text-xs mb-2 truncate">
+                    <MapPin size={12} /> {snapshot.address}
+                </div>
+            )}
+
+            <p className="text-zinc-400 text-sm font-mono">{snapshot.askingPrice ? `${CURRENCY_SYMBOLS[snapshot.currency] || 'R'} ${Number(snapshot.askingPrice).toLocaleString()}` : 'No price'}</p>
+            
+            <div className="flex-grow" />
+
+            {hasFooterContent && (
+                <div className="mt-4 pt-4 border-t border-zinc-800 space-y-4">
+                    {(snapshot.bedrooms || snapshot.bathrooms || snapshot.propertyType) && (
+                        <div className="flex items-center gap-3 text-xs text-zinc-500 font-medium">
+                            {snapshot.bedrooms && <span className="flex items-center gap-1"><Bed size={14} /> {snapshot.bedrooms}</span>}
+                            {snapshot.bathrooms && <span className="flex items-center gap-1"><Bath size={14} /> {snapshot.bathrooms}</span>}
+                            {snapshot.propertyType && <span className="flex items-center gap-1 capitalize"><Home size={14} /> {snapshot.propertyType}</span>}
+                        </div>
+                    )}
+                    {snapshot.insights?.progress && (
+                        <div>
+                            <div className="flex justify-between items-center mb-1">
+                                <span className="text-[10px] font-bold text-zinc-500 uppercase">Insight Progress</span>
+                            </div>
+                            <ProgressBar percentage={snapshot.insights.progress.completionPercent} status={snapshot.insights.progress.status} />
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
+
+const ProjectGrid = ({ projects, onProjectClick, onRequestDelete }: any) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projects.map((p: any) => (
+            <ProjectCard key={p.id} project={p} onProjectClick={onProjectClick} onRequestDelete={onRequestDelete} />
+        ))}
+    </div>
+);
+
+const ComparisonGrid = ({ comparisons }: any) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {comparisons.map((c: any) => (
+            <div key={c.id} className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl">
+                <h3 className="text-white font-bold text-lg mb-1 truncate">{c.propertyAName} vs {c.propertyBName}</h3>
+                <p className="text-zinc-500 text-xs mb-4">Compared on {c.createdAt?.toDate().toLocaleDateString()}</p>
+                <ul className="space-y-2 text-sm">
+                    {c.keyDifferences?.slice(0, 3).map((diff: any, i: number) => (
+                        <li key={i} className="text-zinc-300 flex items-start gap-2">
+                            <span className="text-orange-400 mt-1"><TrendingUp size={14} /></span>
+                            {diff.text}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        ))}
+    </div>
+);
+
 function DashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -432,91 +517,6 @@ function DashboardContent() {
     </div>
   );
 }
-
-const EmptyState = ({ type, onAction }: { type: string, onAction: () => void }) => (
-    <div className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl">
-        <p className="text-zinc-500 mb-4">No {type}s saved yet.</p>
-        <button onClick={onAction} className="text-orange-500 font-bold hover:underline">Create your first one</button>
-    </div>
-);
-
-const ProjectCard = ({ project, onProjectClick, onRequestDelete }: any) => {
-    const snapshot = project.inputSnapshot || {};
-    const title = project.projectName || snapshot.projectName || 'Untitled Project';
-    const showAddress = snapshot.address;
-    const hasFooterContent = (snapshot.bedrooms || snapshot.bathrooms || snapshot.propertyType) || snapshot.insights?.progress;
-
-    return (
-        <div onClick={() => onProjectClick(project)} className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-orange-500 cursor-pointer transition-all group flex flex-col h-full">
-            <div className="flex justify-between items-start mb-4">
-                <div className="flex flex-wrap gap-2">
-                    <span className="px-2 py-1 bg-zinc-800 rounded text-[10px] font-bold text-zinc-400 uppercase tracking-wider">{snapshot.type || 'Investor'}</span>
-                    {snapshot.type === 'investor' && <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${snapshot.strategy === 'flip' ? 'bg-amber-900/30 text-amber-500' : 'bg-emerald-900/30 text-emerald-500'}`}>{snapshot.strategy === 'flip' ? 'Flip' : 'Rental'}</span>}
-                </div>
-                <button onClick={(e) => onRequestDelete(project.id, e)} className="p-2 -m-2 text-zinc-500 hover:text-rose-500 transition-colors z-10" title="Delete Project"><Trash2 size={14} /></button>
-            </div>
-            
-            <h3 className="text-white font-bold text-lg mb-1 group-hover:text-orange-500 transition-colors truncate">{title}</h3>
-            
-            {showAddress && (
-                <div className="flex items-center gap-1 text-zinc-500 text-xs mb-2 truncate">
-                    <MapPin size={12} /> {snapshot.address}
-                </div>
-            )}
-
-            <p className="text-zinc-400 text-sm font-mono">{snapshot.askingPrice ? `${CURRENCY_SYMBOLS[snapshot.currency] || 'R'} ${Number(snapshot.askingPrice).toLocaleString()}` : 'No price'}</p>
-            
-            <div className="flex-grow" />
-
-            {hasFooterContent && (
-                <div className="mt-4 pt-4 border-t border-zinc-800 space-y-4">
-                    {(snapshot.bedrooms || snapshot.bathrooms || snapshot.propertyType) && (
-                        <div className="flex items-center gap-3 text-xs text-zinc-500 font-medium">
-                            {snapshot.bedrooms && <span className="flex items-center gap-1"><Bed size={14} /> {snapshot.bedrooms}</span>}
-                            {snapshot.bathrooms && <span className="flex items-center gap-1"><Bath size={14} /> {snapshot.bathrooms}</span>}
-                            {snapshot.propertyType && <span className="flex items-center gap-1 capitalize"><Home size={14} /> {snapshot.propertyType}</span>}
-                        </div>
-                    )}
-                    {snapshot.insights?.progress && (
-                        <div>
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="text-[10px] font-bold text-zinc-500 uppercase">Insight Progress</span>
-                            </div>
-                            <ProgressBar percentage={snapshot.insights.progress.completionPercent} status={snapshot.insights.progress.status} />
-                        </div>
-                    )}
-                </div>
-            )}
-        </div>
-    );
-};
-
-const ProjectGrid = ({ projects, onProjectClick, onRequestDelete }: any) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((p: any) => (
-            <ProjectCard key={p.id} project={p} onProjectClick={onProjectClick} onRequestDelete={onRequestDelete} />
-        ))}
-    </div>
-);
-
-const ComparisonGrid = ({ comparisons }: any) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {comparisons.map((c: any) => (
-            <div key={c.id} className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl">
-                <h3 className="text-white font-bold text-lg mb-1 truncate">{c.propertyAName} vs {c.propertyBName}</h3>
-                <p className="text-zinc-500 text-xs mb-4">Compared on {c.createdAt?.toDate().toLocaleDateString()}</p>
-                <ul className="space-y-2 text-sm">
-                    {c.keyDifferences?.slice(0, 3).map((diff: any, i: number) => (
-                        <li key={i} className="text-zinc-300 flex items-start gap-2">
-                            <span className="text-orange-400 mt-1"><TrendingUp size={14} /></span>
-                            {diff.text}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        ))}
-    </div>
-);
 
 export default function DashboardPage() {
   return (
