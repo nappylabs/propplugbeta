@@ -307,7 +307,7 @@ function DashboardInner() {
                     <input
                         type="text"
                         value={initialData?.projectName || ''}
-                        onChange={(e) => setInitialData(prev => ({ ...prev, projectName: e.target.value }))}
+                        onChange={(e) => setInitialData((prev: any) => ({ ...prev, projectName: e.target.value }))}
                         onBlur={() => { if (!initialData?.projectName) setInitialData((prev: any) => ({ ...prev, projectName: `Project #${projects.length + 1}` })) }}
                         placeholder="Enter project name..."
                         className="bg-transparent text-white text-center font-bold text-lg w-full max-w-md outline-none focus:bg-slate-800 rounded-lg px-3 py-1 transition-colors placeholder:text-slate-500"

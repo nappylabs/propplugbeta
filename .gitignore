@@ -27,6 +27,7 @@ jspm_packages/
 # Build outputs
 dist/
 build/
+.next/
 
 # Environment variables
 .env
