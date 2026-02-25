@@ -1120,7 +1120,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     ) : (
                         <div className="space-y-2">
                             <h5 className="text-[10px] font-bold text-zinc-500 uppercase">Units / Rooms</h5>
-                            {inputs.multiLetUnits.map(unit => (
+                            {inputs.multiLetUnits.map((unit: any) => (
                                 <div key={unit.id} className="flex items-center gap-2">
                                     <input type="text" placeholder="Unit Name" value={unit.name} onChange={e => updateMultiLetUnit(unit.id, 'name', e.target.value)} className="w-1/2 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-orange-500" />
                                     <div className="relative w-1/2">
