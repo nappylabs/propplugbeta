@@ -424,7 +424,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
   };
 
   const updateInsightState = (updater: (draft: DealInsightsV2) => void) => {
-    setInputs(prev => {
+    setInputs((prev: any) => {
       const newInsights = JSON.parse(JSON.stringify(prev.insights));
       updater(newInsights);
       newInsights.lastUpdated = Date.now();
@@ -488,15 +488,15 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
   // Multi-let Handlers
   const addMultiLetUnit = () => {
     const newUnit = { id: Date.now().toString(), name: `Unit ${inputs.multiLetUnits.length + 1}`, rent: '' };
-    setInputs(prev => ({ ...prev, multiLetUnits: [...(prev.multiLetUnits || []), newUnit] }));
+    setInputs((prev: any) => ({ ...prev, multiLetUnits: [...(prev.multiLetUnits || []), newUnit] }));
   };
 
   const removeMultiLetUnit = (id: string) => {
-    setInputs(prev => ({ ...prev, multiLetUnits: prev.multiLetUnits.filter(u => u.id !== id) }));
+    setInputs((prev: any) => ({ ...prev, multiLetUnits: prev.multiLetUnits.filter(u => u.id !== id) }));
   };
 
   const updateMultiLetUnit = (id: string, field: 'name' | 'rent', value: string) => {
-    setInputs(prev => ({
+    setInputs((prev: any) => ({
       ...prev,
       multiLetUnits: prev.multiLetUnits.map(u => u.id === id ? { ...u, [field]: value } : u)
     }));
