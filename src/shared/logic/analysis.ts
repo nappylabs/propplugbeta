@@ -13,11 +13,14 @@ export const calculateAnalysis = (inputs: any) => {
     const bondPayment = loanAmount > 0 ? (loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, num(inputs.termYears) * 12)) / (Math.pow(1 + monthlyRate, num(inputs.termYears) * 12) - 1)) : 0;
     
     // Rental Logic
+    const customExpensesTotal = Array.isArray(inputs.customExpenses) 
+      ? inputs.customExpenses.reduce((acc: number, item: any) => acc + num(item.value), 0) 
+      : 0;
     const maintenance = inputs.includeMaintenance ? num(inputs.monthlyRent) * (num(inputs.maintenancePercentRent) / 100) : 0;
     const vacancy = inputs.includeVacancy ? num(inputs.monthlyRent) * (num(inputs.vacancyPercent) / 100) : 0;
     const management = inputs.includeManagement ? num(inputs.monthlyRent) * (num(inputs.managementPercent) / 100) : 0;
 
-    const monthlyExpenses = num(inputs.levies) + num(inputs.rates) + num(inputs.insurance) + num(inputs.utilities) + maintenance + vacancy + management;
+    const monthlyExpenses = num(inputs.levies) + num(inputs.rates) + num(inputs.insurance) + num(inputs.utilities) + maintenance + vacancy + management + customExpensesTotal;
     const netCashflow = num(inputs.monthlyRent) - bondPayment - monthlyExpenses;
     const annualNetIncome = netCashflow * 12;
     const netYield = purchasePrice > 0 ? ((num(inputs.monthlyRent) * 12 - monthlyExpenses * 12) / purchasePrice) * 100 : 0;
@@ -28,50 +31,65 @@ export const calculateAnalysis = (inputs: any) => {
 
     const bondRegistrationFees = num(inputs.bondRegistrationFees);
     const closingCosts = transferCosts + bondRegistrationFees;
-    const totalEquityRequired = depositAmount + closingCosts;
+    const totalEquityRequired = depositAmount + closingCosts + num(inputs.renovationBudget);
     const cashOnCashReturn = totalEquityRequired > 0 ? (annualNetIncome / totalEquityRequired) * 100 : 0;
 
-    // Shared Custom Expenses Calculation
-    const customExpensesTotal = Array.isArray(inputs.customExpenses) 
-      ? inputs.customExpenses.reduce((acc: number, item: any) => acc + num(item.value), 0) 
-      : 0;
+    const totalInvestorOutgoings = bondPayment + monthlyExpenses;
+    const opexRatio = num(inputs.monthlyRent) > 0 ? (totalInvestorOutgoings / num(inputs.monthlyRent)) * 100 : 0;
+
+    const investorBudgetBreakdown = [
+        { name: 'Bond', value: bondPayment },
+        { name: 'Levies & Rates', value: num(inputs.levies) + num(inputs.rates) },
+        { name: 'Provisions', value: maintenance + vacancy + management },
+        { name: 'Insurance & Utils', value: num(inputs.insurance) + num(inputs.utilities) },
+        ...(Array.isArray(inputs.customExpenses) ? inputs.customExpenses.map((c: any) => ({ name: c.name || 'Custom', value: num(c.value) })) : []),
+        { name: 'Net Cashflow', value: Math.max(0, netCashflow) }
+    ].filter(item => item.value > 0);
 
     // 10-Year Rental Projection
     const rentalSeries = [];
+    let totalPrincipalPaid = 0;
     let currentEquity = depositAmount;
     let currentLoan = loanAmount;
     let currentRent = num(inputs.monthlyRent);
     let currentFixedExpenses = num(inputs.levies) + num(inputs.rates) + num(inputs.insurance) + num(inputs.utilities);
     
     for(let y = 1; y <= 10; y++) {
-        const interestForYear = currentLoan * (num(inputs.interestRate) / 100);
-        const principalPaid = (bondPayment * 12) - interestForYear;
-        currentLoan -= principalPaid;
-        if (currentLoan < 0) currentLoan = 0;
-        
-        const propertyValue = purchasePrice * Math.pow(1 + (num(inputs.propertyAppreciationRate)/100), y);
-        currentEquity = propertyValue - currentLoan;
-
         if (y > 1) {
             currentRent *= (1 + num(inputs.rentEscalationRate)/100);
             currentFixedExpenses *= (1 + num(inputs.inflationRate)/100);
         }
 
-        const maintenance = inputs.includeMaintenance ? currentRent * (num(inputs.maintenancePercentRent) / 100) : 0;
-        const vacancy = inputs.includeVacancy ? currentRent * (num(inputs.vacancyPercent) / 100) : 0;
-        const management = inputs.includeManagement ? currentRent * (num(inputs.managementPercent) / 100) : 0;
+        const maintenanceForYear = inputs.includeMaintenance ? currentRent * (num(inputs.maintenancePercentRent) / 100) : 0;
+        const vacancyForYear = inputs.includeVacancy ? currentRent * (num(inputs.vacancyPercent) / 100) : 0;
+        const managementForYear = inputs.includeManagement ? currentRent * (num(inputs.managementPercent) / 100) : 0;
         
-        const totalExpenses = currentFixedExpenses + maintenance + vacancy + management;
-        const monthlyCashflow = currentRent - bondPayment - totalExpenses;
+        const totalExpensesForYear = currentFixedExpenses + maintenanceForYear + vacancyForYear + managementForYear;
+        const monthlyCashflowForSeries = currentRent - bondPayment - totalExpensesForYear;
+        const annualCashflowForYear = monthlyCashflowForSeries * 12;
+
+        // Extra payments
+        const reinvestmentAmount = annualCashflowForYear > 0 ? annualCashflowForYear * (num(inputs.reinvestPercent) / 100) : 0;
+        const extraPaymentsForYear = (num(inputs.extraMonthlyPayment) * 12) + num(inputs.annualLumpSum) + reinvestmentAmount;
+
+        const interestForYear = currentLoan * (num(inputs.interestRate) / 100);
+        const principalPaid = (bondPayment * 12) - interestForYear + extraPaymentsForYear;
+
+        totalPrincipalPaid += principalPaid;
+        currentLoan -= principalPaid;
+        if (currentLoan < 0) currentLoan = 0;
         
-        const annualNetIncome = (currentRent * 12) - (totalExpenses * 12);
-        const yieldPercent = purchasePrice > 0 ? (annualNetIncome / purchasePrice) * 100 : 0;
+        const propertyValue = purchasePrice * Math.pow(1 + (num(inputs.propertyAppreciationRate)/100), y);
+        currentEquity = propertyValue - currentLoan;
+        
+        const annualNetIncomeForYield = (currentRent * 12) - (totalExpensesForYear * 12);
+        const yieldPercent = purchasePrice > 0 ? (annualNetIncomeForYield / purchasePrice) * 100 : 0;
 
         rentalSeries.push({
             year: y,
             equity: Math.round(currentEquity),
             debt: Math.round(currentLoan),
-            cashflow: Math.round(monthlyCashflow * 12),
+            cashflow: Math.round(annualCashflowForYear),
             yield: parseFloat(yieldPercent.toFixed(2))
         });
     }
@@ -182,5 +200,5 @@ export const calculateAnalysis = (inputs: any) => {
         ownerSeries.push({ year: y, equity: Math.round(equity) });
     }
 
-    return { purchasePrice, bondPayment, monthlyExpenses, netCashflow, grossYield: isNaN(grossYield) ? 0 : grossYield, netYield: isNaN(netYield) ? 0 : netYield, cashOnCashReturn: isNaN(cashOnCashReturn) ? 0 : cashOnCashReturn, rentalSeries, flip: { sunkCosts, monthlyBurn, burnPointMonth, velocityROI: isNaN(velocityROI) ? 0 : velocityROI, totalCashRequired: totalCashRequiredFlip, series: flipSeries }, tenant: { rentVsBuySeries, betterOption: rentVsBuySeries.length > 0 && rentVsBuySeries[9].buy > rentVsBuySeries[9].rent ? 'Buying' : 'Renting', rentToIncomeRatio: isNaN(rentToIncomeRatio) ? 0 : rentToIncomeRatio, disposableIncome: isNaN(disposableIncome) ? 0 : disposableIncome, savingsRate: isNaN(savingsRate) ? 0 : savingsRate, budgetBreakdown, totalLivingCosts }, owner: { totalCosts: totalOwnerCosts, totalMonthlyOutflow: ownerTotalOutflow, incomeRatio: isNaN(incomeRatio) ? 0 : incomeRatio, maxRate, series: ownerSeries, budgetBreakdown: ownerBudgetBreakdown, disposableIncome: ownerDisposable } };
+    return { purchasePrice, bondPayment, monthlyExpenses, netCashflow, grossYield: isNaN(grossYield) ? 0 : grossYield, netYield: isNaN(netYield) ? 0 : netYield, cashOnCashReturn: isNaN(cashOnCashReturn) ? 0 : cashOnCashReturn, opexRatio: isNaN(opexRatio) ? 0 : opexRatio, investorBudgetBreakdown, rentalSeries, totalPrincipalPaid, flip: { sunkCosts, monthlyBurn, burnPointMonth, velocityROI: isNaN(velocityROI) ? 0 : velocityROI, totalCashRequired: totalCashRequiredFlip, series: flipSeries }, tenant: { rentVsBuySeries, betterOption: rentVsBuySeries.length > 0 && rentVsBuySeries[9].buy > rentVsBuySeries[9].rent ? 'Buying' : 'Renting', rentToIncomeRatio: isNaN(rentToIncomeRatio) ? 0 : rentToIncomeRatio, disposableIncome: isNaN(disposableIncome) ? 0 : disposableIncome, savingsRate: isNaN(savingsRate) ? 0 : savingsRate, budgetBreakdown, totalLivingCosts }, owner: { totalCosts: totalOwnerCosts, totalMonthlyOutflow: ownerTotalOutflow, incomeRatio: isNaN(incomeRatio) ? 0 : incomeRatio, maxRate, series: ownerSeries, budgetBreakdown: ownerBudgetBreakdown, disposableIncome: ownerDisposable } };
 };

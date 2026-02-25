@@ -33,6 +33,9 @@ export const generateComparison = (projectA: any, projectB: any): GeneratedCompa
       ['levies', 'rates', 'vacancyPercent', 'propertyAppreciationRate', 'rentEscalationRate', 'inflationRate'].forEach(key => {
           (analysis as any)[key] = parseFloat(project.inputSnapshot[key]) || 0;
       });
+      (analysis as any).total10yCashflow = analysis.rentalSeries.reduce((sum: number, year: any) => sum + year.cashflow, 0);
+      (analysis as any).equityY10 = analysis.rentalSeries.length === 10 ? analysis.rentalSeries[9].equity : 0;
+      (analysis as any).totalPrincipalPaid = analysis.totalPrincipalPaid || 0;
       return analysis;
   };
 
@@ -110,19 +113,18 @@ export const generateComparison = (projectA: any, projectB: any): GeneratedCompa
 
 
   // --- Qualitative Differences ---
-  const getTopInsight = (insights: any, category: string) => {
-      if (!insights) return null;
-      const riskPrompt = Object.values(insights.prompts).find((p: any) => p.category === category && p.completedAt);
-      return riskPrompt ? (riskPrompt as any).response : null;
+  const getRisks = (insights: any) => {
+      if (!insights || insights.version !== 2 || !insights.risks) return [];
+      return insights.risks;
   }
 
-  const riskA = getTopInsight(projectA.inputSnapshot.insights, 'risks');
-  const riskB = getTopInsight(projectB.inputSnapshot.insights, 'risks');
-  if (riskA && !riskB) {
-      keyDifferences.push({ text: `You noted a risk for Property A: "${riskA}"`, icon: 'risk' });
-  }
-  if (!riskA && riskB) {
-      keyDifferences.push({ text: `You noted a risk for Property B: "${riskB}"`, icon: 'risk' });
+  const risksA = getRisks(projectA.inputSnapshot.insights);
+  const risksB = getRisks(projectB.inputSnapshot.insights);
+
+  if (risksA.length > 0 && risksB.length === 0) {
+      keyDifferences.push({ text: `You noted risks for Property A: "${risksA[0]}"`, icon: 'risk' });
+  } else if (risksA.length === 0 && risksB.length > 0) {
+      keyDifferences.push({ text: `You noted risks for Property B: "${risksB[0]}"`, icon: 'risk' });
   }
 
   // --- Metric Definitions ---
@@ -201,11 +203,11 @@ export const generateComparison = (projectA: any, projectB: any): GeneratedCompa
   };
 
   const getOutlookMetrics = () => {
-      return [
-          createMetric('Capital Growth', 'propertyAppreciationRate', 'high', (v, cs) => formatPercent(v)),
-          createMetric('Rental Escalation', 'rentEscalationRate', 'high', (v, cs) => formatPercent(v)),
-          createMetric('Inflation Assumption', 'inflationRate', 'low', (v, cs) => formatPercent(v)),
-      ];
+    return [
+        createMetric('Total 10Y Cashflow', 'total10yCashflow', 'high', formatCurrency),
+        createMetric('Final Equity (Y10)', 'equityY10', 'high', formatCurrency),
+        createMetric('Total Principal Paid (10Y)', 'totalPrincipalPaid', 'high', formatCurrency),
+    ];
   };
 
   const financialMetrics = getFinancialMetrics();

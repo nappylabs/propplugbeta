@@ -361,23 +361,28 @@ export default function ComparePage() {
                                     {[comparisonData.insightSnapshot.A, comparisonData.insightSnapshot.B].map((snapshot, i) => (
                                         <div key={i} className="bg-zinc-800/50 p-4 rounded-lg">
                                             <h4 className="font-bold text-zinc-300 mb-3">{i === 0 ? 'Property A' : 'Property B'}</h4>
-                                            {snapshot && Object.values(snapshot.prompts).some(p => p.isPinned) ? (
-                                                <ul className="space-y-4 text-sm">
-                                                    {Object.values(snapshot.prompts).filter(p => p.isPinned).map((p) => (
-                                                        <li key={p.id} className="text-sm text-zinc-300 border-l-2 border-zinc-700 pl-3">
-                                                            <p className="font-bold text-white text-xs">{p.question}</p>
-                                                            <p className="text-zinc-400">{p.response}</p>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            ) : (
-                                                <div className="text-sm text-zinc-500">
-                                                    {snapshot ? (
-                                                        <p>No notes pinned. Star (⭐) your key insights to see them here.</p>
-                                                    ) : (
-                                                        <p>⚠ No insights recorded.</p>
+                                            {snapshot ? (
+                                                <div className="space-y-4">
+                                                    {snapshot.risks && snapshot.risks.length > 0 && (
+                                                        <div>
+                                                            <h5 className="text-xs font-bold text-orange-400 uppercase mb-2">Risks</h5>
+                                                            <ul className="space-y-2">
+                                                                {snapshot.risks.map((risk: string, idx: number) => (
+                                                                    <li key={idx} className="text-sm text-zinc-300 border-l-2 border-zinc-700 pl-3">{risk}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
                                                     )}
+                                                    {snapshot.notes && (
+                                                        <div>
+                                                            <h5 className="text-xs font-bold text-zinc-500 uppercase mb-2">Notes</h5>
+                                                            <p className="text-sm text-zinc-400 whitespace-pre-wrap">{snapshot.notes}</p>
+                                                        </div>
+                                                    )}
+                                                    {(!snapshot.risks?.length && !snapshot.notes) && <p className="text-sm text-zinc-500">No specific risks or notes recorded.</p>}
                                                 </div>
+                                            ) : (
+                                                <p className="text-sm text-zinc-500">⚠ No insights recorded.</p>
                                             )}
                                         </div>
                                     ))}

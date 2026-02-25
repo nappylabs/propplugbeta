@@ -252,6 +252,9 @@ export default function LandingPage() {
                 <Link href="/cookies" className="hover:text-white cursor-pointer transition-colors">Cookie Policy</Link>
               </li>
               <li>
+                <Link href="/paia" className="hover:text-white cursor-pointer transition-colors">PAIA Manual</Link>
+              </li>
+              <li>
                 <button onClick={() => setShowCookieSettings(true)} className="hover:text-white cursor-pointer transition-colors text-left">Manage Cookies</button>
               </li>
             </ul>

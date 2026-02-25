@@ -1,31 +1,55 @@
-// 2. Type Definitions
-// File: src/types/insights.ts
+export type ProfileType = 'investor_rent' | 'investor_flip' | 'owner' | 'tenant';
 
-export type InsightCategory = 'key_factors' | 'risks' | 'opportunities' | 'personal_fit' | 'actions';
-
-export interface InsightPromptResponse {
-  id: string; // e.g., 'inv_attraction'
-  category: InsightCategory;
-  question: string;
-  response: string; // User's text input
-  tags: string[]; // From suggestion chips
-  isPinned: boolean;
-  completedAt: number | null; // Timestamp
+export interface ChecklistItem {
+  id: string;
+  label: string;
+  completed: boolean;
+  completedAt?: number;
+  note?: string;
 }
 
-export interface InsightProgress {
-  totalPrompts: number;
-  completedPrompts: number;
-  completionPercent: number;
-  status: 'getting_started' | 'in_progress' | 'nearly_complete' | 'complete';
-}
+export interface DealInsightsV2 {
+  version: 2;
+  profileType: ProfileType;
 
-export interface DealInsights {
-  schemaVersion: number;
-  lastUpdated: number;
-  progress: InsightProgress;
-  prompts: {
-    [promptId: string]: InsightPromptResponse;
+  snapshot: {
+    positives: string[];
+    negatives: string[];
+    primaryReason: string;
   };
-  freeformNotes: string;
+
+  drivers: string[];
+  risks: string[];
+  opportunities: string[];
+
+  personalFit: {
+    [key: string]: string | string[];
+  };
+
+  checklist: ChecklistItem[];
+
+  observations: {
+    viewingNotes: string[];
+    marketSignals: string[];
+    freeform?: string;
+  };
+
+  finalAssessment: {
+    decisionLean: string;
+    confidence: number;
+    strategyFit: string;
+    stressLevel: string;
+  };
+
+  notes?: string;
+
+  progress: {
+    completionPercent: number;
+    status: string;
+  };
+
+  lastUpdated: number;
 }
+
+// Keep old types for reference or potential migration logic
+export * from './legacyInsights';

@@ -5,12 +5,13 @@ import {
   AreaChart, Area, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
   CartesianGrid, ReferenceLine, Legend, PieChart, Pie, Cell
 } from 'recharts';
-import { Info, Edit3, AlertTriangle, Save, Shield, Share2, Mail, MessageCircle, Link as LinkIcon, MoreHorizontal, Check, Loader2, ExternalLink, Trash2, Plus, X, Brain, Star, Bed, Bath, MapPin, Home, Car, Maximize } from 'lucide-react';
-import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc } from 'firebase/firestore';
+import { Info, Edit3, AlertTriangle, Save, Shield, Share2, Mail, MessageCircle, Link as LinkIcon, MoreHorizontal, Check, Loader2, ExternalLink, Trash2, Plus, X, Brain, Star, Bed, Bath, MapPin, Home, Car, Maximize, ListChecks } from 'lucide-react';
+import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc, getDoc } from 'firebase/firestore';
 import { calculateAnalysis } from '@/shared/logic/analysis';
-import { DealInsights } from '@/types/insights';
-import { PROMPTS } from '@/shared/data/prompts';
+import { DealInsightsV2, ProfileType, ChecklistItem } from '@/types/insights';
+import { INSIGHTS_CONFIG, INSIGHTS_WEIGHTS } from '@/shared/data/prompts';
 import { InsightsDrawer } from '@/components/insights/InsightsDrawer';
+import { ChecklistDrawer } from '@/components/insights/ChecklistDrawer';
 
 // --- Types & Interfaces ---
 
@@ -170,18 +171,15 @@ const InputField = ({ label, value, onChange, type = "number", prefix, suffix, d
     if (val === '' || val === undefined || val === null) return '';
     const strVal = String(val);
     if (type !== 'number') return strVal;
-    
-    const parts = strVal.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    return parts.join('.');
+    return strVal;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     if (type === 'number') {
-        const rawVal = val.replace(/\s/g, '');
-        if (rawVal === '' || rawVal === '-' || !isNaN(Number(rawVal))) {
-             onChange(rawVal);
+        // Allow empty, negative sign, or valid numbers
+        if (val === '' || val === '-' || !isNaN(Number(val))) {
+             onChange(val);
         }
     } else {
         onChange(val);
@@ -280,12 +278,20 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [projectId, setProjectId] = useState<string | null>(initialData?.id || null);
   const [isCopied, setIsCopied] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
   const [autosaveStatus, setAutosaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved');
   const [showCurrencyWarning, setShowCurrencyWarning] = useState(false);
   const [pendingCurrency, setPendingCurrency] = useState<Currency | null>(null);
   const [isInsightsOpen, setIsInsightsOpen] = useState(defaultInsightsOpen);
+  const [isChecklistOpen, setIsChecklistOpen] = useState(false);
   
   const isLimited = mode === 'limited';
+
+  const getOpexColorClass = (opex: number) => {
+    if (opex <= 75) return 'fill-emerald-400';
+    if (opex <= 85) return 'fill-amber-400';
+    return 'fill-rose-400';
+  };
   const isInvestorLocked = readOnly || (isLimited && persona === 'investor');
   const isAdvancedLocked = readOnly || isLimited; // For advanced charts like Equity Builder
   const isActionDisabled = readOnly || isLimited; // For Save/Delete buttons
@@ -333,7 +339,13 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
     parking: '',
     floorSize: '',
     address: '',
-    insights: null as DealInsights | null,
+    insights: null as DealInsightsV2 | null,
+    // New fields
+    extraMonthlyPayment: '',
+    annualLumpSum: '',
+    reinvestPercent: '',
+    rentMode: 'entire',
+    multiLetUnits: [] as { id: string, name: string, rent: string }[],
     ...initialData
   });
 
@@ -357,89 +369,138 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
     setPendingCurrency(null);
   };
 
-  const initializeInsights = (persona: UserPersona) => {
-    const personaPrompts = PROMPTS[persona] || [];
-    const newInsights: DealInsights = {
-      schemaVersion: 1,
+  const calculateProgress = (insights: DealInsightsV2 | null): { completionPercent: number, status: string } => {
+    if (!insights) return { completionPercent: 0, status: 'getting_started' };
+
+    const { snapshot, drivers, risks, opportunities, personalFit, checklist, finalAssessment } = insights;
+    let score = 0;
+
+    if (snapshot.positives.length > 0 && snapshot.negatives.length > 0 && snapshot.primaryReason) score += INSIGHTS_WEIGHTS.snapshot;
+    if (drivers.length > 0) score += INSIGHTS_WEIGHTS.drivers;
+    if (risks.length > 0) score += INSIGHTS_WEIGHTS.risks;
+    if (opportunities.length > 0) score += INSIGHTS_WEIGHTS.opportunities;
+    if (Object.values(personalFit).every(v => v && (Array.isArray(v) ? v.length > 0 : true))) score += INSIGHTS_WEIGHTS.personalFit;
+    
+    const checklistCompleted = checklist.filter(c => c.completed).length;
+    if (checklist.length > 0) {
+      score += (checklistCompleted / checklist.length) * INSIGHTS_WEIGHTS.checklist;
+    }
+
+    if (finalAssessment.decisionLean && finalAssessment.strategyFit && finalAssessment.stressLevel) score += INSIGHTS_WEIGHTS.finalAssessment;
+
+    const completionPercent = Math.min(100, score);
+    let status = 'getting_started';
+    if (completionPercent >= 100) status = 'complete';
+    else if (completionPercent >= 85) status = 'nearly_complete';
+    else if (completionPercent >= 21) status = 'in_progress';
+
+    return { completionPercent, status };
+  };
+
+  const initializeInsights = (p: UserPersona, s: InvestorMode) => {
+    const modeSuffix = s === 'rental' ? 'rent' : s;
+    const profileType: ProfileType = p === 'investor' ? `investor_${modeSuffix}` as ProfileType : p as ProfileType;
+    const config = INSIGHTS_CONFIG[profileType];
+
+    const newInsights: DealInsightsV2 = {
+      version: 2,
+      profileType,
+      snapshot: { positives: [], negatives: [], primaryReason: '' },
+      drivers: [],
+      risks: [],
+      opportunities: [],
+      personalFit: Object.keys(config.personalFit).reduce((acc, key) => ({ ...acc, [key]: '' }), {}),
+      checklist: config.checklist.map(item => ({ ...item, completed: false })),
+      observations: { viewingNotes: [], marketSignals: [], freeform: '' },
+      finalAssessment: { decisionLean: '', confidence: 5, strategyFit: '', stressLevel: '' },
+      notes: '',
       lastUpdated: Date.now(),
       progress: {
-        totalPrompts: personaPrompts.length,
-        completedPrompts: 0,
         completionPercent: 0,
         status: 'getting_started',
       },
-      prompts: personaPrompts.reduce((acc, p) => {
-        acc[p.id] = {
-          id: p.id,
-          category: p.category,
-          question: p.question,
-          response: '',
-          tags: [],
-          isPinned: false,
-          completedAt: null,
-        };
-        return acc;
-      }, {} as { [key: string]: any }),
-      freeformNotes: '',
     };
     handleInputChange('insights', newInsights as any);
   };
 
-  const handleUpdateInsight = useCallback((promptId: string, text: string, tags: string[]) => {
-    const currentInsights = inputs.insights;
-    if (!currentInsights) return;
-
-    // Deep clone to ensure we don't mutate the state directly
-    const newInsights: DealInsights = JSON.parse(JSON.stringify(currentInsights));
-    const prompt = newInsights.prompts[promptId];
-
-    if (prompt) {
-      const wasCompleted = !!prompt.completedAt;
-      const isNowCompleted = text.trim() !== '' || tags.length > 0;
-
-      prompt.response = text;
-      prompt.tags = tags;
-      prompt.completedAt = isNowCompleted ? (prompt.completedAt || Date.now()) : null;
-
-      if (!wasCompleted && isNowCompleted) newInsights.progress.completedPrompts++;
-      if (wasCompleted && !isNowCompleted) newInsights.progress.completedPrompts--;
-
-      // Recalculate progress
-      const { totalPrompts, completedPrompts } = newInsights.progress;
-      const completionPercent = totalPrompts > 0 ? (completedPrompts / totalPrompts) * 100 : 0;
-      newInsights.progress.completionPercent = completionPercent;
-
-      if (completionPercent >= 100) newInsights.progress.status = 'complete';
-      else if (completionPercent >= 85) newInsights.progress.status = 'nearly_complete';
-      else if (completionPercent >= 21) newInsights.progress.status = 'in_progress';
-      else newInsights.progress.status = 'getting_started';
-
+  const updateInsightState = (updater: (draft: DealInsightsV2) => void) => {
+    setInputs(prev => {
+      const newInsights = JSON.parse(JSON.stringify(prev.insights));
+      updater(newInsights);
       newInsights.lastUpdated = Date.now();
-      setInputs((prev: any) => ({ ...prev, insights: newInsights }));
-    }
+      newInsights.progress = calculateProgress(newInsights);
+      return { ...prev, insights: newInsights };
+    });
+  };
+
+  const handleInsightUpdate = useCallback((path: string, value: any) => {
+    updateInsightState(draft => {
+      const keys = path.split('.');
+      let current = draft as any;
+      for (let i = 0; i < keys.length - 1; i++) {
+        current = current[keys[i]];
+      }
+      current[keys[keys.length - 1]] = value;
+    });
   }, [inputs.insights]);
 
-  const handlePinInsight = useCallback((promptId: string) => {
-    const currentInsights = inputs.insights;
-    if (!currentInsights) return;
+  const handleToggleMultiSelect = useCallback((path: string, value: string, max?: number) => {
+    updateInsightState(draft => {
+      const keys = path.split('.');
+      let current = draft as any;
+      for (let i = 0; i < keys.length - 1; i++) {
+        current = current[keys[i]];
+      }
+      const array = current[keys[keys.length - 1]] as string[];
+      const index = array.indexOf(value);
 
-    const newInsights: DealInsights = JSON.parse(JSON.stringify(currentInsights));
-    const prompt = newInsights.prompts[promptId];
-
-    if (prompt && prompt.completedAt) {
-      prompt.isPinned = !prompt.isPinned;
-      newInsights.lastUpdated = Date.now();
-      setInputs((prev: any) => ({ ...prev, insights: newInsights }));
-    }
+      if (index > -1) {
+        array.splice(index, 1);
+      } else {
+        if (!max || array.length < max) {
+          array.push(value);
+        }
+      }
+    });
   }, [inputs.insights]);
 
-  const handleUpdateFreeform = useCallback((text: string) => {
-    const currentInsights = inputs.insights;
-    if (!currentInsights) return;
-
-    const newInsights: DealInsights = { ...currentInsights, freeformNotes: text, lastUpdated: Date.now() };
-    setInputs((prev: any) => ({ ...prev, insights: newInsights }));
+  const handleToggleChecklist = useCallback((id: string) => {
+    updateInsightState(draft => {
+      const item = draft.checklist.find(c => c.id === id);
+      if (item) {
+        item.completed = !item.completed;
+        item.completedAt = item.completed ? Date.now() : undefined;
+      }
+    });
   }, [inputs.insights]);
+
+  const handleAddChecklistItem = useCallback((label: string) => {
+    updateInsightState(draft => {
+      const newItem: ChecklistItem = {
+        id: `custom_${Date.now()}`,
+        label,
+        completed: false,
+      };
+      draft.checklist.push(newItem);
+    });
+  }, [inputs.insights]);
+
+  // Multi-let Handlers
+  const addMultiLetUnit = () => {
+    const newUnit = { id: Date.now().toString(), name: `Unit ${inputs.multiLetUnits.length + 1}`, rent: '' };
+    setInputs(prev => ({ ...prev, multiLetUnits: [...(prev.multiLetUnits || []), newUnit] }));
+  };
+
+  const removeMultiLetUnit = (id: string) => {
+    setInputs(prev => ({ ...prev, multiLetUnits: prev.multiLetUnits.filter(u => u.id !== id) }));
+  };
+
+  const updateMultiLetUnit = (id: string, field: 'name' | 'rent', value: string) => {
+    setInputs(prev => ({
+      ...prev,
+      multiLetUnits: prev.multiLetUnits.map(u => u.id === id ? { ...u, [field]: value } : u)
+    }));
+  };
 
   // Sync persona from extension data if available
   useEffect(() => {
@@ -455,8 +516,11 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
     if (initialData?.currency) {
       handleInputChange('currency', initialData.currency);
     }
-    if (initialData && !initialData.insights) {
-      initializeInsights(initialData.type || persona);
+    // Initialize V2 insights if they don't exist or are the old version
+    if (initialData && (!initialData.insights || initialData.insights.version !== 2)) {
+      const p = initialData.type || persona;
+      const s = initialData.strategy || investorMode;
+      initializeInsights(p, s);
     }
   }, [initialData]);
 
@@ -509,6 +573,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
             const sanitizedInputs = JSON.parse(JSON.stringify({ ...inputs, type: persona, strategy: investorMode, currency: inputs.currency }));
             await setDoc(projectRef, {
                 inputSnapshot: sanitizedInputs,
+                projectName: sanitizedInputs.projectName || 'Untitled Project',
                 lastModified: serverTimestamp(),
                 ownerId: user.uid, // Ensure ownerId is set for security rules
                 listingUrl: initialData?.url || inputs.url || ''
@@ -518,6 +583,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
             const sanitizedInputs = JSON.parse(JSON.stringify({ ...inputs, type: persona, strategy: investorMode, currency: inputs.currency }));
             const docRef = await addDoc(collection(db, 'projects'), {
                 inputSnapshot: sanitizedInputs,
+        projectName: sanitizedInputs.projectName || 'Untitled Project',
                 ownerId: user.uid,
                 createdAt: serverTimestamp(),
                 source: 'Web Dashboard',
@@ -527,11 +593,15 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
             setProjectId(id);
         }
         
-        if (!silent) alert('Project saved successfully!');
+        if (!silent) {
+            setSaveMessage('Saved!');
+            setTimeout(() => setSaveMessage(''), 2000);
+        }
         setAutosaveStatus('saved');
         if (!silent) setIsSaving(false);
         return id;
     } catch (e) {
+        setSaveMessage('Save Failed');
         console.error(e);
         alert(`Failed to save project: ${(e as Error).message}`);
         setAutosaveStatus('unsaved');
@@ -651,7 +721,16 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
 
   // --- Calculations ---
 
-  const analysis = useMemo(() => calculateAnalysis(inputs), [inputs]);
+  const analysisInputs = useMemo(() => {
+    const processedInputs = { ...inputs };
+    if (inputs.rentMode === 'multi-let') {
+      const totalMultiLetRent = (inputs.multiLetUnits || []).reduce((sum, unit) => sum + (Number(unit.rent) || 0), 0);
+      processedInputs.monthlyRent = String(totalMultiLetRent);
+    }
+    return processedInputs;
+  }, [inputs]);
+
+  const analysis = useMemo(() => calculateAnalysis(analysisInputs), [analysisInputs]);
   const currencySymbol = CURRENCY_SYMBOLS[inputs.currency as Currency] || 'R';
 
   const chartConfig = {
@@ -671,10 +750,15 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
         isOpen={isInsightsOpen}
         onClose={() => setIsInsightsOpen(false)}
         insights={inputs.insights}
-        onUpdateInsight={handleUpdateInsight}
-        onPinInsight={handlePinInsight}
-        onUpdateFreeform={handleUpdateFreeform}
-        persona={persona}
+        updateInsight={handleInsightUpdate}
+        toggleMultiSelect={handleToggleMultiSelect}
+      />
+      <ChecklistDrawer
+        isOpen={isChecklistOpen}
+        onClose={() => setIsChecklistOpen(false)}
+        checklist={inputs.insights?.checklist || []}
+        toggleChecklist={handleToggleChecklist}
+        addChecklistItem={handleAddChecklistItem}
       />
       <CurrencyWarningModal
         isOpen={showCurrencyWarning} 
@@ -727,6 +811,16 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                 </select>
             </div>
 
+            {/* Checklist Button */}
+            <button 
+              id="checklist-btn"
+              onClick={() => setIsChecklistOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-zinc-800 text-zinc-200 rounded-xl font-bold text-xs hover:bg-zinc-700 transition-colors border border-zinc-700"
+            >
+              <ListChecks size={14} />
+              <span className="hidden sm:inline">Checklist</span>
+            </button>
+
             {/* Insights Button */}
             <button 
               id="deal-insights-btn"
@@ -734,7 +828,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
               className="flex items-center gap-2 px-4 py-2 bg-zinc-800 text-zinc-200 rounded-xl font-bold text-xs hover:bg-zinc-700 transition-colors border border-zinc-700"
             >
               <Brain size={14} />
-              <span className="hidden sm:inline">Deal Insights</span>
+              <span className="hidden sm:inline">Insights</span>
             </button>
 
             {/* Autosave Indicator */}
@@ -761,7 +855,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     className="flex items-center gap-2 px-4 py-2 bg-zinc-800 text-zinc-200 rounded-xl font-bold text-xs hover:bg-zinc-700 transition-colors border border-zinc-700"
                 >
                     <ExternalLink size={14} />
-                    <span className="hidden sm:inline">Deal Source</span>
+                    <span className="hidden sm:inline">Source</span>
                 </a>
             ) : (
                 <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 text-zinc-400 rounded-xl font-bold text-xs border border-zinc-800 cursor-default">
@@ -801,11 +895,13 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
             {user && !isActionDisabled && (
                 <button 
                     onClick={() => handleSave()}
-                    disabled={isSaving}
-                    className="flex items-center gap-2 px-6 py-2 bg-white text-zinc-900 rounded-xl font-bold text-xs hover:bg-zinc-200 transition-colors disabled:opacity-50"
+                    disabled={isSaving || !!saveMessage}
+                    className="flex items-center justify-center gap-2 px-6 py-2 w-36 bg-white text-zinc-900 rounded-xl font-bold text-xs hover:bg-zinc-200 transition-all disabled:opacity-70"
                 >
-                    <Save size={14} />
-                    {isSaving ? 'Saving...' : 'Save Project'}
+                    {saveMessage ? <><Check size={14} /> {saveMessage}</> 
+                      : isSaving ? <><Loader2 size={14} className="animate-spin" /> Saving...</> 
+                      : <><Save size={14} /> Save Project</>
+                    }
                 </button>
             )}
         </div>
@@ -889,7 +985,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                 />
             </div>
 
-            <div className={isInvestorLocked ? 'blur-lg pointer-events-none' : ''}>
+            <div className={`space-y-8 ${isInvestorLocked ? 'blur-lg pointer-events-none' : ''}`}>
               <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-[2.5rem] h-[400px] relative">
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-white font-bold uppercase tracking-widest text-xs opacity-50">10-Year Wealth Accumulation</h3>
@@ -947,16 +1043,43 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     </AreaChart>
                 </ResponsiveContainer>
               </div>
+              <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-[2.5rem] h-[400px]">
+                  <h3 className="text-white font-bold uppercase tracking-widest text-xs opacity-50 mb-6">Monthly Cost vs Income</h3>
+                  <ResponsiveContainer width="100%" height="85%">
+                      <PieChart>
+                          <g>
+                            <text x="50%" y="50%" textAnchor="middle" dy="-0.5em" className="fill-zinc-400 text-xs font-bold uppercase tracking-wider">
+                                Opex margin
+                            </text>
+                            <text x="50%" y="50%" textAnchor="middle" dy="0.8em" className={`font-black text-2xl transition-colors duration-300 ${getOpexColorClass(analysis.opexRatio)}`}>
+                                {analysis.opexRatio.toFixed(1)}%
+                            </text>
+                          </g>
+                          <Pie data={analysis.investorBudgetBreakdown} cx="50%" cy="50%" labelLine={false} label={false} outerRadius={120} innerRadius={70} dataKey="value" paddingAngle={2} onMouseEnter={onPieEnter} onMouseLeave={onPieLeave}>
+                              {analysis.investorBudgetBreakdown.map((entry: any, index: number) => (
+                                  <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} style={{ opacity: activeIndex === null || activeIndex === index ? 1 : 0.3, transition: 'opacity 0.2s' }} />
+                              ))}
+                          </Pie>
+                          <Tooltip contentStyle={{backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px'}} itemStyle={{ color: '#e2e8f0' }} formatter={(value: number, name: string) => {
+                              const total = analysis.investorBudgetBreakdown.reduce((sum: number, entry: any) => sum + entry.value, 0);
+                              const percent = (value / (Number(inputs.monthlyRent) || 1)) * 100;
+                              return [`${currencySymbol} ${formatNumber(value)} (${percent.toFixed(0)}%)`, name];
+                          }} />
+                          <Legend verticalAlign="bottom" wrapperStyle={{ fontSize: '10px', bottom: -10 }} />
+                      </PieChart>
+                  </ResponsiveContainer>
+              </div>
 
-              <div id="assumptions-grid" ref={assumptionsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start mt-8">
+              <div id="assumptions-grid" ref={assumptionsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
                 <AccordionCard 
-                    title="Purchase Price"
-                    summaryValue={`${currencySymbol} ${formatNumber(analysis.purchasePrice)}`}
+                    title="Acquisition & Reno"
+                    summaryValue={`${currencySymbol} ${formatNumber(analysis.purchasePrice + Number(inputs.renovationBudget || 0))}`}
                     isOpen={activeAccordion === 'purchase'}
                     onToggle={() => setActiveAccordion(activeAccordion === 'purchase' ? null : 'purchase')}
                 >
                     <InputField label="Asking Price" value={inputs.askingPrice} onChange={(v: string) => handleInputChange('askingPrice', v)} prefix={currencySymbol} disabled={isInvestorLocked} />
                     <InputField label="Discount" value={inputs.discountOnAsking} onChange={(v: string) => handleInputChange('discountOnAsking', v)} suffix="%" disabled={isInvestorLocked} />
+                    <InputField label="Renovation Budget" value={inputs.renovationBudget} onChange={(v: string) => handleInputChange('renovationBudget', v)} prefix={currencySymbol} disabled={isInvestorLocked} />
                 </AccordionCard>
 
                 <AccordionCard 
@@ -971,15 +1094,48 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                     <InputField label="Loan Term" value={inputs.termYears} onChange={(v: string) => handleInputChange('termYears', v)} suffix="Years" disabled={isInvestorLocked} />
                     <InputField label="Transfer Costs" value={inputs.transferCosts} onChange={(v: string) => handleInputChange('transferCosts', v)} prefix={currencySymbol} disabled={isInvestorLocked} />
                     <InputField label="Bond Registration Fees" value={inputs.bondRegistrationFees} onChange={(v: string) => handleInputChange('bondRegistrationFees', v)} prefix={currencySymbol} disabled={isInvestorLocked} />
+                    <div className="pt-4 mt-2 border-t border-zinc-800">
+                        <h5 className="text-[10px] font-bold text-zinc-500 uppercase mb-3">Advanced Repayments</h5>
+                        <div className="space-y-3">
+                            <InputField label="Monthly Top-up" value={inputs.extraMonthlyPayment} onChange={(v: string) => handleInputChange('extraMonthlyPayment', v)} prefix={currencySymbol} disabled={isInvestorLocked} />
+                            <InputField label="Annual Lump Sum" value={inputs.annualLumpSum} onChange={(v: string) => handleInputChange('annualLumpSum', v)} prefix={currencySymbol} disabled={isInvestorLocked} />
+                            <InputField label="Reinvest Cashflow" value={inputs.reinvestPercent} onChange={(v: string) => handleInputChange('reinvestPercent', v)} suffix="%" disabled={isInvestorLocked} />
+                        </div>
+                    </div>
                 </AccordionCard>
 
                 <AccordionCard 
                     title="Rental Income"
-                    summaryValue={`${currencySymbol} ${formatNumber(Number(inputs.monthlyRent || 0))}`}
+                    summaryValue={`${currencySymbol} ${formatNumber(Number(analysisInputs.monthlyRent || 0))}`}
                     isOpen={activeAccordion === 'rental'}
                     onToggle={() => setActiveAccordion(activeAccordion === 'rental' ? null : 'rental')}
                 >
-                    <InputField label="Gross Monthly Rent" value={inputs.monthlyRent} onChange={(v: string) => handleInputChange('monthlyRent', v)} prefix={currencySymbol} disabled={isInvestorLocked} />
+                    <div className="flex items-center justify-center gap-2 bg-zinc-800 p-1 rounded-lg mb-4">
+                        <button onClick={() => handleInputChange('rentMode', 'entire')} className={`flex-1 text-xs font-bold py-1 rounded-md ${inputs.rentMode === 'entire' ? 'bg-zinc-700 text-white' : 'text-zinc-400'}`}>Entire Property</button>
+                        <button onClick={() => handleInputChange('rentMode', 'multi-let')} className={`flex-1 text-xs font-bold py-1 rounded-md ${inputs.rentMode === 'multi-let' ? 'bg-zinc-700 text-white' : 'text-zinc-400'}`}>Multi-let</button>
+                    </div>
+
+                    {inputs.rentMode === 'entire' ? (
+                        <InputField label="Gross Monthly Rent" value={inputs.monthlyRent} onChange={(v: string) => handleInputChange('monthlyRent', v)} prefix={currencySymbol} disabled={isInvestorLocked} />
+                    ) : (
+                        <div className="space-y-2">
+                            <h5 className="text-[10px] font-bold text-zinc-500 uppercase">Units / Rooms</h5>
+                            {inputs.multiLetUnits.map(unit => (
+                                <div key={unit.id} className="flex items-center gap-2">
+                                    <input type="text" placeholder="Unit Name" value={unit.name} onChange={e => updateMultiLetUnit(unit.id, 'name', e.target.value)} className="w-1/2 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-orange-500" />
+                                    <div className="relative w-1/2">
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-xs font-bold">{currencySymbol}</span>
+                                        <input type="number" placeholder="Rent" value={unit.rent} onChange={e => updateMultiLetUnit(unit.id, 'rent', e.target.value)} className="w-full bg-zinc-800 border border-zinc-700 rounded-lg pl-7 pr-3 py-2 text-xs text-white font-bold outline-none focus:border-orange-500" />
+                                    </div>
+                                    <button onClick={() => removeMultiLetUnit(unit.id)} className="text-zinc-500 hover:text-rose-500 p-1"><X size={14} /></button>
+                                </div>
+                            ))}
+                             <button onClick={addMultiLetUnit} className="w-full flex items-center justify-center gap-2 text-xs font-bold text-orange-400 hover:text-orange-300 py-2 border border-dashed border-zinc-700 rounded-lg hover:border-orange-400">
+                                <Plus size={14} /> Add Unit
+                            </button>
+                        </div>
+                    )}
+
                     <div className="pt-4 mt-4 border-t border-zinc-800 space-y-3">
                         <div className="flex items-center gap-2">
                             <div className="flex-grow"><InputField label="Vacancy Provision" value={inputs.vacancyPercent} onChange={(v: string) => handleInputChange('vacancyPercent', v)} suffix="%" disabled={isInvestorLocked} /></div>
@@ -1013,6 +1169,23 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                                 <div className="flex-grow"><InputField label="Management Provision" value={inputs.managementPercent} onChange={(v: string) => handleInputChange('managementPercent', v)} suffix="%" disabled={isInvestorLocked} /></div>
                                 <input type="checkbox" checked={inputs.includeManagement} onChange={e => setInputs({...inputs, includeManagement: e.target.checked})} className="mt-6" disabled={isInvestorLocked} />
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Custom Expenses Section */}
+                    <div className="pt-4 mt-2 border-t border-zinc-800">
+                        <div className="flex justify-between items-center mb-3">
+                            <h5 className="text-[10px] font-bold text-zinc-500 uppercase">Custom Expenses</h5>
+                            {!isInvestorLocked && <button onClick={addCustomExpense} className="p-1 bg-zinc-800 rounded-full text-zinc-400 hover:text-white hover:bg-orange-600 transition-colors"><Plus size={14} /></button>}
+                        </div>
+                        <div className="space-y-3">
+                            {inputs.customExpenses?.map((expense: any) => (
+                                <div key={expense.id} className="flex gap-2 items-center">
+                                    <input type="text" placeholder="Name" value={expense.name} onChange={(e) => updateCustomExpense(expense.id, 'name', e.target.value)} disabled={isInvestorLocked} className="w-1/2 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-orange-500" />
+                                    <input type="number" placeholder="Amount" value={expense.value} onChange={(e) => updateCustomExpense(expense.id, 'value', e.target.value)} disabled={isInvestorLocked} className="w-1/3 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-white font-bold outline-none focus:border-orange-500" />
+                                    {!isInvestorLocked && <button onClick={() => removeCustomExpense(expense.id)} className="text-zinc-500 hover:text-rose-500"><X size={14} /></button>}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </AccordionCard>
