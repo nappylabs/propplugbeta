@@ -1592,7 +1592,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                             onMouseEnter={onPieEnter}
                             onMouseLeave={onPieLeave}
                         >
-                            {analysis.tenant.budgetBreakdown.map((entry, index) => {
+                            {analysis.tenant.budgetBreakdown.map((entry: any, index: number) => {
                                 return <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} style={{ opacity: activeIndex === null || activeIndex === index ? 1 : 0.3, transition: 'opacity 0.2s' }} />;
                             })}
                         </Pie>

@@ -58,7 +58,7 @@ export default function ComparePage() {
     }
   };
 
-  const filteredProjects = projects.filter(p => {
+  const filteredProjects = projects.filter((p: any) => {
       if (!selectedCategory) return false;
       const type = p.inputSnapshot?.type || 'investor';
       const strategy = p.inputSnapshot?.strategy || 'rental';
@@ -83,16 +83,16 @@ export default function ComparePage() {
   // Currency Mismatch Check
   const currencyMismatch = useMemo(() => {
       if (selectedIds.length !== 2) return false;
-      const p1 = projects.find(p => p.id === selectedIds[0]);
-      const p2 = projects.find(p => p.id === selectedIds[1]);
+      const p1 = projects.find((p: any) => p.id === selectedIds[0]);
+      const p2 = projects.find((p: any) => p.id === selectedIds[1]);
       if (!p1 || !p2) return false;
       return p1.inputSnapshot.currency !== p2.inputSnapshot.currency;
   }, [selectedIds, projects]);
 
   const comparisonData = useMemo<GeneratedComparison | null>(() => {
     if (selectedIds.length !== 2 || currencyMismatch) return null;
-    const projectA = projects.find(p => p.id === selectedIds[0]);
-    const projectB = projects.find(p => p.id === selectedIds[1]);
+    const projectA = projects.find((p: any) => p.id === selectedIds[0]);
+    const projectB = projects.find((p: any) => p.id === selectedIds[1]);
     if (!projectA || !projectB) return null;
     return generateComparison(projectA, projectB);
   }, [selectedIds, projects, currencyMismatch]);
@@ -183,7 +183,7 @@ export default function ComparePage() {
                         </div>
                     ) : (
                         <div className="grid gap-4">
-                            {filteredProjects.map(p => (
+                            {filteredProjects.map((p: any) => (
                                 <div 
                                     key={p.id} 
                                     onClick={() => toggleSelection(p.id)}

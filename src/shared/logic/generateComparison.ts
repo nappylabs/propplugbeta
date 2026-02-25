@@ -23,7 +23,7 @@ export const generateComparison = (projectA: any, projectB: any): GeneratedCompa
   const getNestedValue = (obj: any, path: string) => {
       if (!path) return null;
       // 'hasOwnProperty' check is important for safety.
-      const result = path.split('.').reduce((o, p) => (o && o.hasOwnProperty(p) ? o[p] : null), obj);
+      const result = path.split('.').reduce((o: any, p: string) => (o && o.hasOwnProperty(p) ? o[p] : null), obj);
       return result === undefined ? null : result;
   }
 
