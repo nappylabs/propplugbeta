@@ -492,13 +492,13 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
   };
 
   const removeMultiLetUnit = (id: string) => {
-    setInputs((prev: any) => ({ ...prev, multiLetUnits: prev.multiLetUnits.filter(u => u.id !== id) }));
+    setInputs((prev: any) => ({ ...prev, multiLetUnits: prev.multiLetUnits.filter((u: any) => u.id !== id) }));
   };
 
   const updateMultiLetUnit = (id: string, field: 'name' | 'rent', value: string) => {
     setInputs((prev: any) => ({
       ...prev,
-      multiLetUnits: prev.multiLetUnits.map(u => u.id === id ? { ...u, [field]: value } : u)
+      multiLetUnits: prev.multiLetUnits.map((u: any) => u.id === id ? { ...u, [field]: value } : u)
     }));
   };
 
