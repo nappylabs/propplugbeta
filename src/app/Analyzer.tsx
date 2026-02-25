@@ -724,7 +724,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
   const analysisInputs = useMemo(() => {
     const processedInputs = { ...inputs };
     if (inputs.rentMode === 'multi-let') {
-      const totalMultiLetRent = (inputs.multiLetUnits || []).reduce((sum, unit) => sum + (Number(unit.rent) || 0), 0);
+      const totalMultiLetRent = (inputs.multiLetUnits || []).reduce((sum: number, unit: any) => sum + (Number(unit.rent) || 0), 0);
       processedInputs.monthlyRent = String(totalMultiLetRent);
     }
     return processedInputs;
@@ -1600,7 +1600,7 @@ export default function Analyzer({ initialData, mode = 'draft', user, readOnly =
                             contentStyle={{backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px'}} 
                             itemStyle={{ color: '#e2e8f0' }}
                             formatter={(value: number, name: string) => {
-                                const total = analysis.tenant.budgetBreakdown.reduce((sum, entry) => sum + entry.value, 0);
+                                const total = analysis.tenant.budgetBreakdown.reduce((sum: number, entry: any) => sum + entry.value, 0);
                                 if (total === 0 || typeof value !== 'number') {
                                     return [`${currencySymbol} 0 (0%)`, name];
                                 }
