@@ -1,11 +1,11 @@
-import { DealInsights } from './insights';
+import { DealInsightsV2 } from './insights';
 
 export interface ComparisonMetric {
   label: string;
-  valueA: number | string;
-  valueB: number | string;
+  valueA: number | null;
+  valueB: number | null;
   winner: 'A' | 'B' | 'tie';
-  format: (value: number | string, currency: string) => string;
+  format: (value: number | null, currency: string) => string;
 }
 
 export interface ComparisonCategory {
@@ -24,8 +24,8 @@ export interface GeneratedComparison {
   propertyB: any;
   keyDifferences: KeyDifference[];
   insightSnapshot: {
-    A: DealInsights | null;
-    B: DealInsights | null;
+    A: DealInsightsV2 | null;
+    B: DealInsightsV2 | null;
   };
   financials: ComparisonCategory;
   risks: ComparisonCategory;
