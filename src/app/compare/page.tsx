@@ -408,7 +408,7 @@ export default function ComparePage() {
                                     <span className="font-bold text-zinc-300">Property A</span>
                                     <span className="text-zinc-400">{comparisonData.insightSnapshot.A?.progress.completionPercent.toFixed(0) || 0}% complete</span>
                                 </div>
-                                <ProgressBar percentage={comparisonData.insightSnapshot.A?.progress.completionPercent || 0} status={comparisonData.insightSnapshot.A?.progress.status || 'getting_started'} />
+                                <ProgressBar percentage={comparisonData.insightSnapshot.A?.progress.completionPercent || 0} status={comparisonData.insightSnapshot.A?.progress.status as any || 'getting_started'} />
                                 <Link href={`/dashboard?projectId=${comparisonData.propertyA.id}&openInsights=true`} className="text-orange-400 text-xs font-bold mt-2 inline-block hover:underline">
                                     Add/Edit Insights
                                 </Link>
@@ -418,7 +418,7 @@ export default function ComparePage() {
                                     <span className="font-bold text-zinc-300">Property B</span>
                                     <span className="text-zinc-400">{comparisonData.insightSnapshot.B?.progress.completionPercent.toFixed(0) || 0}% complete</span>
                                 </div>
-                                <ProgressBar percentage={comparisonData.insightSnapshot.B?.progress.completionPercent || 0} status={comparisonData.insightSnapshot.B?.progress.status || 'getting_started'} />
+                                <ProgressBar percentage={comparisonData.insightSnapshot.B?.progress.completionPercent || 0} status={comparisonData.insightSnapshot.B?.progress.status as any || 'getting_started'} />
                                 <Link href={`/dashboard?projectId=${comparisonData.propertyB.id}&openInsights=true`} className="text-orange-400 text-xs font-bold mt-2 inline-block hover:underline">
                                     Add/Edit Insights
                                 </Link>

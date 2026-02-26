@@ -235,14 +235,14 @@ export default function SharedComparisonPage({ params }: { params: { ids: string
                                     <span className="font-bold text-slate-300">Property A</span>
                                     <span className="text-slate-400">{comparisonData.insightSnapshot.A?.progress.completionPercent.toFixed(0) || 0}% complete</span>
                                 </div>
-                                <ProgressBar percentage={comparisonData.insightSnapshot.A?.progress.completionPercent || 0} status={comparisonData.insightSnapshot.A?.progress.status || 'getting_started'} />
+                                <ProgressBar percentage={comparisonData.insightSnapshot.A?.progress.completionPercent || 0} status={comparisonData.insightSnapshot.A?.progress.status as any || 'getting_started'} />
                             </div>
                              <div>
                                 <div className="flex justify-between items-center mb-1 text-sm">
                                     <span className="font-bold text-slate-300">Property B</span>
                                     <span className="text-slate-400">{comparisonData.insightSnapshot.B?.progress.completionPercent.toFixed(0) || 0}% complete</span>
                                 </div>
-                                <ProgressBar percentage={comparisonData.insightSnapshot.B?.progress.completionPercent || 0} status={comparisonData.insightSnapshot.B?.progress.status || 'getting_started'} />
+                                <ProgressBar percentage={comparisonData.insightSnapshot.B?.progress.completionPercent || 0} status={comparisonData.insightSnapshot.B?.progress.status as any || 'getting_started'} />
                             </div>
                         </div>
                     </div>
