@@ -50,6 +50,3 @@ export interface DealInsightsV2 {
 
   lastUpdated: number;
 }
-
-// Keep old types for reference or potential migration logic
-export * from './legacyInsights';
